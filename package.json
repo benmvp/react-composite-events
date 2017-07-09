@@ -1,0 +1,75 @@
+{
+  "name": "react-composite-events",
+  "version": "0.0.1",
+  "description": "Easily create composite events for transparent use in React components",
+  "author": "Ben Ilegbodu <ben@benmvp.com>",
+  "main": "dist/react-composite-events.cjs.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/benmvp/react-composite-events.git"
+  },
+  "bugs": {
+    "url": "https://github.com/paypal/glamorous/issues"
+  },
+  "homepage": "https://github.com/paypal/glamorous#readme",
+  "license": "MIT",
+  "scripts": {
+    "format": "prettier-eslint --write 'src/**/*.js'",
+    "lint": "eslint src",
+    "precommit": "lint-staged",
+    "test": "jest",
+    "validate": "yarn run lint && yarn run test"
+  },
+  "lint-staged": {
+    "*.js": [
+      "yarn run format",
+      "git add"
+    ]
+  },
+  "babel": {
+    "presets": [
+      [
+        "env",
+        {
+          "targets": {
+            "node": "4.5"
+          }
+        }
+      ],
+      "react"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "eventbrite-react",
+    "rules": {
+      "semi": [
+        "error",
+        "never"
+      ]
+    }
+  },
+  "peerDependencies": {
+    "react": ">=15"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-eslint": "^7.0.0",
+    "babel-jest": "^20.0.3",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-react": "^6.24.1",
+    "enzyme": "^2.9.1",
+    "eslint": "^3.0.0",
+    "eslint-config-eventbrite-react": "^5.0.0",
+    "eslint-plugin-import": "^2.0.0",
+    "eslint-plugin-jsx-a11y": "^6.0.0",
+    "eslint-plugin-react": "^6.0.0",
+    "husky": "^0.14.3",
+    "jest": "^20.0.4",
+    "lint-staged": "^4.0.1",
+    "prettier-eslint-cli": "^4.1.1",
+    "prop-types": "^15.5.10",
+    "react": "16.0.0-alpha.13",
+    "react-dom": "^15.6.1",
+    "react-test-renderer": "^15.6.1"
+  }
+}
