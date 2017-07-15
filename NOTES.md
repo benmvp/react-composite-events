@@ -17,7 +17,7 @@ const MyComponent = ({onMouseRemainOver}) => (
 index.js
 
 - `addCompositeEvent`
-  * `eventName`
+  * `eventPropName`
   * `triggerEvent`
   * `duration` (milliseconds)
     - `<= 0` - no time
@@ -26,6 +26,8 @@ index.js
   * `cancelEvent`
   * `triggersResetTime`
   * `allowRefire`
+  * `beforeCallback`
+    - called before calling the actual event handler
 
 - `addCompositeEvents`
   * array of composite event info objects
@@ -33,25 +35,23 @@ index.js
 
 ### Helpers
 
-press/index.js
+input/index.js
 - `addLongPress`
 - `addRemainPressed(duration)`
 - `addRemainUnpressed(duration)`
+- `addRemainBlurred(duration)`
+- `addRemainFocused(duration)`
 
-mouseMove/index.js
+- `addFirstActionEvent(eventName)`
+- `addRepeatActionEvent(eventName, times, maxInterval)`
+- `addFirstPress`
+- `addRepeatPress(times, maxInterval)`
+
+mouse/index.js
 - `addMouseRemainOut(duration)`
 - `addMouseRemainOver(duration)`
 - `addMouseRest(duration)`
 
-keyboard/index.js
-- `addKeyRemainDown(duration)`
-- `addKeyRemainUp(duration)`
-
-yyy/index.js
-- `addRemainBlurred(duration)`
-- `addRemainFocused(duration)`
-
-dom/mouseMove/index.js
 - `addMouseEnterLeft`
 - `addMouseEnterRight`
 - `addMouseEnterTop`
@@ -61,8 +61,7 @@ dom/mouseMove/index.js
 - `addMouseExitTop`
 - `addMouseExitBottom`
 
-dom/modKey/index.js
-- `addModifierKeyEvent(modifierKeys, mouseEvent)`
+- `addModifierKeyMouseEvent(modifierKeys, mouseEvent)`
 - `addAltClick`
 - `addCtrlClick`
 - `addMetaClick`
@@ -76,8 +75,8 @@ dom/modKey/index.js
 - `addShiftAltMetaClick`
 - ...
 
-count/index.js
-- `addFirstActionEvent(eventName)`
-- `addRepeatActionEvent(eventName, times, maxInterval)`
-- `addFirstPress`
-- `addRepeatPress(times, maxInterval)`
+key/index.js
+- `addKeyRemainUp(duration)`
+- `addKeyRemainDown(duration)`
+- `addKeyPress(keyName)`
+- `addKeyDown(keyName)`
