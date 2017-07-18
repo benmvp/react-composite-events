@@ -7,7 +7,6 @@ Easily create composite events for transparent use in React components.
 
 ## `react-composite-events` is currently under initial design and not available for use!
 
-
 `react-composite-events` is inspired by the [`Uize.Dom.VirtualEvent`](https://github.com/UIZE/UIZE-JavaScript-Framework/blob/master/site-source/js/Uize/Dom/VirtualEvent.js) module that is a part of the open-source [UIZE JavaScript Framework](https://github.com/UIZE/UIZE-JavaScript-Framework). 
 
 ## Installation
@@ -16,32 +15,34 @@ TBD
 
 ## Quick Usage
 
-You use React Composite events by wrapping a comoponent in a higher-order component (HOC) that will provide a handler to the composite event:
+You use composite events by wrapping a comoponent in a higher-order component (HOC) that will provide a handler to the composite event:
 
 ```js
-// import `addMouseRemainOver` HOC
-import {addMouseRemainOver} from 'react-composite-events/mouse'
+// import `addMouseRest` HOC
+import {addMouseRest} from 'react-composite-events/mouse'
 
-// wrap div with `addMouseRemainOver` HOC configured to fire event
-// after 500 milliseconds. This will make a `onMouseRemainOver-500`
+// wrap div with `addMouseRest` HOC configured to fire event
+// after 150 milliseconds. This will make a `onMouseRest-150`
 // composite event prop available
-const FancyDiv = addMouseRemainOver(500)('div')
+const FancyDiv = addMouseRest(150)('div')
 
 export default MyComponent extends PureComponent {
-    _handleMouseRemainOver() {
-        console.log('mouse remained over for 500 milliseconds');
-    }
+  _handleMouseRest() {
+    console.log('mouse rested for 150 milliseconds');
+  }
 
-    render() {
-        // Pass handler to `onMouseRemainOver-500` composite event prop
-        return (
-            <FancyDiv onMouseRemainOver-500={this._handleMouseRemainOver.bind(this)}>
-                Trigger event after mouse rests for 500 milliseconds
-            </FancyDiv>
-        )
-    }
+  render() {
+    // Pass handler to `onMouseRest-150` composite event prop
+    return (
+      <FancyDiv onMouseRest-150={this._handleMouseRest.bind(this)}>
+        Trigger event after mouse rests for 150 milliseconds
+      </FancyDiv>
+    )
+  }
 }
 ```
+
+Imagine a navigation menu that displays on hover. You don't want the menu activated just when the user passes over the menu. You want it to activate when they've rested on the menu for a "short while" to indicate their interest. `onMouseOver` will trigger even if the mouse is just passing over an element, whereas the `onMouseRest` composite event will trigger only after the user has lingered for a bit. The "mouse rest" composite event is a better solution than a simple `onMouseOver`.
 
 ## What is a React Composite Event?
 
@@ -75,7 +76,7 @@ This may sound a little abstract, but what this means is that you can tune the b
 
 The React Composite Event HOCs are grouped by domain:
 
-- [**Base**](src/) - the base HOC from which all other HOCs are built
+- [**Base**](src/) - the base HOC maker from which all other HOCs are built
 - [**Input**](input/) - the HOCs that create composite events with inputs (intended to be environment-agnostic)
 - [**Mouse**](mouse/) - the HOCs that create composite events around DOM mouse events
 - [**Key**](key/) - the HOCs that create composite events around DOM keyboard events

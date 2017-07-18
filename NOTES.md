@@ -1,3 +1,5 @@
+# NOTES
+
 ## Sample end-user-experience
 
 ```js
@@ -17,25 +19,25 @@ const MyComponent = ({onMouseRemainOver}) => (
 index.js
 
 - `addCompositeEvent`
-  * `eventPropName`
-  * `triggerEvent`
-  * `duration` (milliseconds)
+  - `eventPropName`
+  - `triggerEvent`
+  - `defaultDuration` (milliseconds)
     - `<= 0` - no time
     - `> 0` - time
-    - `Infinity` - no end
-  * `cancelEvent`
-  * `triggersResetTime`
-  * `allowRefire`
-  * `beforeCallback`
+    - ~~`Infinity` - no end~~
+  - `cancelEvent`
+  - `shouldResetTimerOnRetrigger`
+  - `allowRefire`
+  - `beforeCallback`
     - called before calling the actual event handler
 
-- `addCompositeEvents`
-  * array of composite event info objects
-
+- ~~`addCompositeEvents`~~
+  - array of composite event info objects
 
 ### Helpers
 
 input/index.js
+
 - `addLongPress`
 - `addRemainPressed(duration)`
 - `addRemainUnpressed(duration)`
@@ -48,6 +50,7 @@ input/index.js
 - `addRepeatPress(times, maxInterval)`
 
 mouse/index.js
+
 - `addMouseRemainOut(duration)`
 - `addMouseRemainOver(duration)`
 - `addMouseRest(duration)`
@@ -76,6 +79,7 @@ mouse/index.js
 - ...
 
 key/index.js
+
 - `addKeyRemainUp(duration)`
 - `addKeyRemainDown(duration)`
 - `addKeyPress(keyName)`
