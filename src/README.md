@@ -1,20 +1,20 @@
 # Top-level API docs
 
-## `addCompositeEvent`
+## `compose`
 
-(Advanced use) Returns a composite event higher-order component (a `Function`) triggered by the specified trigger events and that is optionally canceled by the specified cancel events during a specified amount of time.
+(Advanced use) Returns a composite event higher-order component (a `Function`) that is triggered by the specified trigger events and that is optionally canceled by the specified cancel events during a specified amount of time.
 
-`addCompositeEvent` is intended for advanced users wishing to create their own unique composite event higher-order components, beyond those that are supplied as built-in composite events within `react-composite-events`. It's unlikely that you will use `addCompositeEvent` directly in a client application, but is available if the composite event you need does not yet exist.
+`compose` is intended for advanced users wishing to create their own unique composite event higher-order components, beyond those that are supplied as built-in composite events within `react-composite-events`. It's unlikely that you will use `compose` directly in a client application, but is available if the composite event you need does not yet exist.
 
-### `addMouseRest` Example
+### `withMouseRest` Example
 
 ```js
-// import `addCompositeEvent` HOC maker
-import {addCompositeEvent} from 'react-composite-events'
+// import `compose` HOC maker
+import {compose} from 'react-composite-events'
 
 // make your own "mouse rest" composite event by passing configuration
-// options to `addCompositeEvent`
-const addMouseRest = addCompositeEvent({
+// options to `compose`
+const withMouseRest = compose({
   eventPropName: 'onMouseRest',
   triggerEvent: ['onMouseOver','onMouseMove'],
   defaultDuration: 150,
@@ -23,10 +23,10 @@ const addMouseRest = addCompositeEvent({
   allowRefire: false,
 })
 
-// wrap div with `addMouseRest` HOC configured to fire event
+// wrap div with `withMouseRest` HOC configured to fire event
 // after 500 milliseconds. This will make a `onMouseRest-500`
 // composite event prop available
-const FancyDiv = addMouseRest(500)('div')
+const FancyDiv = withMouseRest(500)('div')
 
 export default MyComponent extends PureComponent {
   _handleMouseRest() {
@@ -48,24 +48,24 @@ The above call would make a parameterized composite event higher-order component
 
 ### `eventPropName`
 
-**(Required)** A `String` specifying the name of the prop that will be made available to the wrapped component. In keeping with the React standard, the `eventPropName` should start with `'on'`, e.g. `'onMouseRest'`.
+**(Required)** A `string` specifying the name of the prop that will be made available to the wrapped component. In keeping with the React standard, the `eventPropName` should start with `'on'`, e.g. `'onMouseRest'`.
 
 ### `triggerEvent`
 
-**(Required)** A `String` name of an event or `Array<String>` of event names that trigger(s) the start of the composite event.
+**(Required)** A `string` name of an event or `Array<String>` of event names that trigger(s) the start of the composite event.
 
 ### `defaultDuration`
 
-**(Optional)** An `Integer` of milliseconds indicating the default duration of time that the composite event should last. The higher-order component that `addCompositeEvent` returns takes an optional duration parameter. When that duration parameter is not specified or `undefined`, the `defaultDuration` is used. Using the [`addMouseRest` example](#addmouserest-example) , if instead `FancyDiv` was created without specifying a duration like:
+**(Optional)** A `number` of milliseconds indicating the default duration of time that the composite event should last. The higher-order component that `compose` returns takes an optional duration parameter. When that duration parameter is not specified or `undefined`, the `defaultDuration` is used. Using the [`withMouseRest` example](#withmouserest-example) , if instead `FancyDiv` was created without specifying a duration like:
 
 ```js
-const FancyDiv = addMouseRest()('div')
+const FancyDiv = withMouseRest()('div')
 ```
 
 Then `FancyDiv` will use the `defaultDuration` of 150 (milliseconds). As a result of not specifying a duration, the `onMouseRest` prop will not be parameterized:
 
 ```js
-const FancyDiv = addMouseRest()('div');
+const FancyDiv = withMouseRest()('div');
 
 export default MyComponent extends PureComponent {
   _handleMouseRest() {
@@ -90,12 +90,12 @@ Typically `defaultDuration` is omitted when the initial [`triggerEvent`](#trigge
 When `defaultDuration` is omitted, the resultant higher-order component doesn't accept and parameters, and the prop added to the component is not parameterized:
 
 ```js
-// import `addCompositeEvent` HOC maker
-import {addCompositeEvent} from 'react-composite-events'
+// import `compose` HOC maker
+import {compose} from 'react-composite-events'
 
 // make your own "mouse rest" composite event by passing configuration
-// options to `addCompositeEvent`
-const addCtrlClick = addCompositeEvent({
+// options to `compose`
+const withCtrlClick = compose({
   eventPropName: 'onCtrlClick',
   triggerEvent: 'click',
   beforeCallback: (handler, domEvent) => {
@@ -107,12 +107,12 @@ const addCtrlClick = addCompositeEvent({
   }
 })
 
-// wrap div with `addCtrlClick` HOC configured to fire event
+// wrap div with `withCtrlClick` HOC configured to fire event
 // when mouse is clicked with Ctrl modifier. This will make
 // `onCtrlClick` composite event prop available.
 // Because no `defaultDuration` was specified, the HOC takes
 // no parameters
-const FancyDiv = addCtrlClick()('div')
+const FancyDiv = withCtrlClick()('div')
 
 export default MyComponent extends PureComponent {
   _handleCtrlClick() {
@@ -132,7 +132,7 @@ export default MyComponent extends PureComponent {
 
 ### `cancelEvent`
 
-**(Optional)** A `String` name of an event or `Array<String>` of event names that cancel(s) the timer started by [`triggerEvent`](#triggerevent) when a [`defaultDuration`](#defaultduration) is specified.
+**(Optional)** A `string` name of an event or `Array<String>` of event names that cancel(s) the timer started by [`triggerEvent`](#triggerevent) when a [`defaultDuration`](#defaultduration) is specified.
 
 If the `cancelEvent` occurs before the timer ends, the composite event is not completed and its handler will not be called. `cancelEvent` is ignored if [`defaultDuration`](#defaultduration) is unspecified.
 
@@ -140,16 +140,16 @@ If the `cancelEvent` occurs before the timer ends, the composite event is not co
 
 **(Optional)** A `boolean` specifying whether or not a [`triggerEvent`](#triggerevent) should reset the timer. If this optional configuration is not specified, then the value `true` will be used as a default.
 
-For the [`addMouseRest` example](#addmouserest-example), if another `onMouseOver` event happens after the initial one that began the composite event, the timer will be reset since `shouldResetTimerOnRetrigger` is `true`. This is because once the mouse starts moving, it's no longer at rest so the timer needs to be reset. If instead you were building a `mouseRemainOver` composite event where the mouse has to just remain over an element but can move around freely, `shouldResetTimerOnRetrigger` should be `false`. `onMouseMove` would trigger the composite event, and continuing to move shouldn't reset the timer. Additional `onMouseMove` events should just be ignored.
+For the [`withMouseRest` example](#withmouserest-example), if another `onMouseOver` event happens after the initial one that began the composite event, the timer will be reset since `shouldResetTimerOnRetrigger` is `true`. This is because once the mouse starts moving, it's no longer at rest so the timer needs to be reset. If instead you were building a `mouseRemainOver` composite event where the mouse has to just remain over an element but can move around freely, `shouldResetTimerOnRetrigger` should be `false`. `onMouseMove` would trigger the composite event, and continuing to move shouldn't reset the timer. Additional `onMouseMove` events should just be ignored.
 
 `shouldResetTimerOnRetrigger` is ignored if [`defaultDuration`](#defaultduration) is unspecified.
 
 ### `allowRefire`
 
-TODO...
+**(Optional)** TODO...
 
 `allowRefire` is ignored if [`defaultDuration`](#defaultduration) is unspecified.
 
 ### `beforeCallback`
 
-TODO...
+**(Optional)** TODO...

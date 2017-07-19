@@ -76,7 +76,7 @@ This may sound a little abstract, but what this means is that you can tune the b
 
 The React Composite Event HOCs are grouped by domain:
 
-- [**Base**](src/) - the base HOC maker from which all other HOCs are built
+- [**Base**](src/) - (advanced) the base HOC composer from which all other HOCs are built
 - [**Input**](input/) - the HOCs that create composite events with inputs (intended to be environment-agnostic)
 - [**Mouse**](mouse/) - the HOCs that create composite events around DOM mouse events
 - [**Key**](key/) - the HOCs that create composite events around DOM keyboard events

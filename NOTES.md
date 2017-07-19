@@ -18,7 +18,7 @@ const MyComponent = ({onMouseRemainOver}) => (
 
 index.js
 
-- `addCompositeEvent`
+- `compose`
   - `eventPropName`
   - `triggerEvent`
   - `defaultDuration` (milliseconds)
@@ -31,56 +31,56 @@ index.js
   - `beforeCallback`
     - called before calling the actual event handler
 
-- ~~`addCompositeEvents`~~
+- ~~`composeMulti`~~
   - array of composite event info objects
 
 ### Helpers
 
 input/index.js
 
-- `addLongPress`
-- `addRemainPressed(duration)`
-- `addRemainUnpressed(duration)`
-- `addRemainBlurred(duration)`
-- `addRemainFocused(duration)`
+- ~~`withLongPress`~~
+- `withRemainPressed(duration)`
+- `withRemainUnpressed(duration)`
+- `withRemainBlurred(duration)`
+- `withRemainFocused(duration)`
 
-- `addFirstActionEvent(eventName)`
-- `addRepeatActionEvent(eventName, times, maxInterval)`
-- `addFirstPress`
-- `addRepeatPress(times, maxInterval)`
+- `composeFirstAction(eventName)`
+- `composeRepeatAction(eventName, times, maxInterval)`
+- `withFirstPress`
+- `withRepeatPress(times, maxInterval)`
 
 mouse/index.js
 
-- `addMouseRemainOut(duration)`
-- `addMouseRemainOver(duration)`
-- `addMouseRest(duration)`
+- `withMouseRemainOut(duration)`
+- `withMouseRemainOver(duration)`
+- `withMouseRest(duration)`
 
-- `addMouseEnterLeft`
-- `addMouseEnterRight`
-- `addMouseEnterTop`
-- `addMouseEnterBottom`
-- `addMouseExitLeft`
-- `addMouseExitRight`
-- `addMouseExitTop`
-- `addMouseExitBottom`
+- `withMouseEnterLeft`
+- `withMouseEnterRight`
+- `withMouseEnterTop`
+- `withMouseEnterBottom`
+- `withMouseExitLeft`
+- `withMouseExitRight`
+- `withMouseExitTop`
+- `withMouseExitBottom`
 
-- `addModifierKeyMouseEvent(modifierKeys, mouseEvent)`
-- `addAltClick`
-- `addCtrlClick`
-- `addMetaClick`
-- `addShiftClick`
-- `addShiftAltClick`
-- `addShiftCtrlClick`
-- `addShiftMetaClick`
-- `addMetaAltClick`
-- `addMetaCtrlClick`
-- `addAltCtrlClick`
-- `addShiftAltMetaClick`
+- `composeMouseModifierKey(modifierKeys, mouseEvent)`
+- `withAltClick`
+- `withCtrlClick`
+- `withMetaClick`
+- `withShiftClick`
+- `withShiftAltClick`
+- `withShiftCtrlClick`
+- `withShiftMetaClick`
+- `withMetaAltClick`
+- `withMetaCtrlClick`
+- `withAltCtrlClick`
+- `withShiftAltMetaClick`
 - ...
 
 key/index.js
 
-- `addKeyRemainUp(duration)`
-- `addKeyRemainDown(duration)`
-- `addKeyPress(keyName)`
-- `addKeyDown(keyName)`
+- `withKeyRemainUp(duration)`
+- `withKeyRemainDown(duration)`
+- `withKeyPress(keyName)`
+- `withKeyDown(keyName)`
