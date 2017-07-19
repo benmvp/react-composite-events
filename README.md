@@ -1,18 +1,39 @@
 # Composite Events for React
 
+[![version](https://img.shields.io/npm/v/react-composite-events.svg?style=flat-square)](http://npm.im/react-composite-events)
+[![downloads](https://img.shields.io/npm/dt/react-composite-events.svg?style=flat-square)](http://npm-stat.com/charts.html?package=react-composite-events&from=2016-03-27)
+![module formats: umd, cjs, and es](https://img.shields.io/badge/module%20formats-umd%2C%20cjs%2C%20es-green.svg?style=flat-square)
+[![license](https://img.shields.io/npm/l/react-composite-events.svg?style=flat-square)](LICENSE)
+
+[![Maintenance Status](https://img.shields.io/badge/status-maintained-brightgreen.svg)](https://github.com/benmvp/react-composite-events/pulse)
 [![Build Status](https://travis-ci.org/benmvp/react-composite-events.svg?branch=master)](https://travis-ci.org/benmvp/react-composite-events)
 [![Coverage Status](https://coveralls.io/repos/github/benmvp/react-composite-events/badge.svg?branch=master)](https://coveralls.io/github/benmvp/react-composite-events?branch=master)
-[![Maintenance Status](https://img.shields.io/badge/status-maintained-brightgreen.svg)](https://github.com/benmvp/react-composite-events/pulse)
+[![Dependencies status](https://img.shields.io/david/benmvp/react-composite-events.svg?style=flat-square)](https://david-dm.org/benmvp/react-composite-events#info=dependencies)
+[![Dev Dependencies status](https://img.shields.io/david/dev/benmvp/react-composite-events.svg?style=flat-square)](https://david-dm.org/benmvp/react-composite-events#info=devDependencies)
+
+[![Watch on GitHub](https://img.shields.io/github/watchers/benmvp/react-composite-events.svg?style=social)](https://github.com/benmvp/react-composite-events/watchers)
+[![Star on GitHub](https://img.shields.io/github/stars/benmvp/react-composite-events.svg?style=social)](https://github.com/benmvp/react-composite-events/stargazers)
+[![Tweet](https://img.shields.io/twitter/url/https/github.com/benmvp/react-composite-events.svg?style=social)](https://twitter.com/intent/tweet?text=Check%20out%20react-composite-events!%20https://github.com/benmvp/react-composite-events%20%F0%9F%91%8D)
 
 A collection of higher-order components (HOCs) to easily create composite events in React components.
 
-> `react-composite-events` is currently under initial API design and not available for use! Check out the [API Docs](#api-docs) and [Notes](NOTES.md) for more info.
+> `react-composite-events` is currently under initial API design and not available for public use! Check out the [API Docs](#api-docs) and [Notes](NOTES.md) for more info.
 
 `react-composite-events` is heavily inspired by the [`Uize.Dom.VirtualEvent`](https://github.com/UIZE/UIZE-JavaScript-Framework/blob/master/site-source/js/Uize/Dom/VirtualEvent.js) module that is a part of the open-source [UIZE JavaScript Framework](https://github.com/UIZE/UIZE-JavaScript-Framework).
 
 ## Installation
 
-TBD
+Install via [Yarn](https://yarnpkg.com/lang/en/docs/managing-dependencies/):
+
+```sh
+yarn add react-composite-events
+```
+
+Install via [NPM](https://docs.npmjs.com/getting-started/installing-npm-packages-locally):
+
+```sh
+npm install --save react-composite-events
+```
 
 ## Quick Usage
 

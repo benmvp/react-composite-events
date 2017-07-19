@@ -1,7 +1,7 @@
 language: node_js
 node_js:
-  - "node"
-  - "7"
+  # - "node"
+  # - "7"
   - "6"
 
 # Cache dependencies in $HOME/.yarn-cache across builds
@@ -10,10 +10,18 @@ cache: yarn
 # Run the the validate script with code coverage
 script: yarn run validate -- -- --coverage
 
-# Send coverage data to Coveralls
+# Scripts to run after validation tests run
 after_success:
-  - yarn global add coveralls
+  # Install some packages globally we'll need
+  - yarn global add coveralls semantic-release
+
+  # Retrieve the coverage informatino and send it to Coveralls
   - cat ./coverage/lcov.info | coveralls
+
+  # 1. Update package.json version number based on commits
+  # 2. Publish new version to NPM
+  # 3. Generate changelog + release on Github
+  - semantic-release pre && npm publish && semantic-release post
 
 # Only run CI on master branch
 branches:
