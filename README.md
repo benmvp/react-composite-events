@@ -3,11 +3,11 @@
 [![Build Status](https://travis-ci.org/benmvp/react-composite-events.svg?branch=master)](https://travis-ci.org/benmvp/react-composite-events)
 [![Maintenance Status](https://img.shields.io/badge/status-maintained-brightgreen.svg)](https://github.com/benmvp/react-composite-events/pulse)
 
-Easily create composite events for transparent use in React components.
+A collection of higher-order components (HOCs) to easily create composite events in React components.
 
-## `react-composite-events` is currently under initial design and not available for use!
+> `react-composite-events` is currently under initial API design and not available for use! Check out the [API Docs](#api-docs) and [Notes](NOTES.md) for more info.
 
-`react-composite-events` is inspired by the [`Uize.Dom.VirtualEvent`](https://github.com/UIZE/UIZE-JavaScript-Framework/blob/master/site-source/js/Uize/Dom/VirtualEvent.js) module that is a part of the open-source [UIZE JavaScript Framework](https://github.com/UIZE/UIZE-JavaScript-Framework). 
+`react-composite-events` is heavily inspired by the [`Uize.Dom.VirtualEvent`](https://github.com/UIZE/UIZE-JavaScript-Framework/blob/master/site-source/js/Uize/Dom/VirtualEvent.js) module that is a part of the open-source [UIZE JavaScript Framework](https://github.com/UIZE/UIZE-JavaScript-Framework).
 
 ## Installation
 
@@ -15,7 +15,7 @@ TBD
 
 ## Quick Usage
 
-You use composite events by wrapping a comoponent in a higher-order component (HOC) that will provide a handler to the composite event:
+You use composite events by wrapping a component in a higher-order component (HOC) that will provide a handler to the composite event:
 
 ```js
 // import `addMouseRest` HOC
@@ -24,7 +24,7 @@ import {addMouseRest} from 'react-composite-events/mouse'
 // wrap div with `addMouseRest` HOC configured to fire event
 // after 150 milliseconds. This will make a `onMouseRest-150`
 // composite event prop available
-const FancyDiv = addMouseRest(150)('div')
+const EnhancedDiv = addMouseRest(150)('div')
 
 export default MyComponent extends PureComponent {
   _handleMouseRest() {
@@ -34,9 +34,9 @@ export default MyComponent extends PureComponent {
   render() {
     // Pass handler to `onMouseRest-150` composite event prop
     return (
-      <FancyDiv onMouseRest-150={this._handleMouseRest.bind(this)}>
+      <EnhancedDiv onMouseRest-150={this._handleMouseRest.bind(this)}>
         Trigger event after mouse rests for 150 milliseconds
-      </FancyDiv>
+      </EnhancedDiv>
     )
   }
 }

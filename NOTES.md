@@ -5,10 +5,10 @@
 ```js
 import {addMouseRemainOver} from 'react-composite-events/mouseMove'
 
-const FancyDiv = addMouseRemainOver(500)('div')
+const EnhancedDiv = addMouseRemainOver(500)('div')
 
 const MyComponent = ({onMouseRemainOver}) => (
-    <FancyDiv onMouseRemainOver-500={onMouseRemainOver} />
+    <EnhancedDiv onMouseRemainOver-500={onMouseRemainOver} />
 )
 ```
 

@@ -2,6 +2,18 @@
 
 ## `compose`
 
+```js
+compose({
+  eventPropName: string,
+  triggerEvent: string | Array<string>,
+  defaultDuration: number,
+  cancelEvent: string | Array<string>,
+  shouldResetTimerOnRetrigger: boolean,
+  allowRefire: boolean,
+  beforeCallback: (handler: Function, ?event: Object) => void
+}): HigherOrderComponent
+```
+
 (Advanced use) Returns a composite event higher-order component (a `Function`) that is triggered by the specified trigger events and that is optionally canceled by the specified cancel events during a specified amount of time.
 
 `compose` is intended for advanced users wishing to create their own unique composite event higher-order components, beyond those that are supplied as built-in composite events within `react-composite-events`. It's unlikely that you will use `compose` directly in a client application, but is available if the composite event you need does not yet exist.
@@ -26,7 +38,7 @@ const withMouseRest = compose({
 // wrap div with `withMouseRest` HOC configured to fire event
 // after 500 milliseconds. This will make a `onMouseRest-500`
 // composite event prop available
-const FancyDiv = withMouseRest(500)('div')
+const EnhancedDiv = withMouseRest(500)('div')
 
 export default MyComponent extends PureComponent {
   _handleMouseRest() {
@@ -36,9 +48,9 @@ export default MyComponent extends PureComponent {
   render() {
     // Pass handler to `onMouseRest-500` composite event prop
     return (
-      <FancyDiv onMouseRest-500={this._handleMouseRest.bind(this)}>
+      <EnhancedDiv onMouseRest-500={this._handleMouseRest.bind(this)}>
         Trigger event after mouse rests for 500 milliseconds
-      </FancyDiv>
+      </EnhancedDiv>
     )
   }
 }
@@ -56,16 +68,16 @@ The above call would make a parameterized composite event higher-order component
 
 ### `defaultDuration`
 
-**(Optional)** A `number` of milliseconds indicating the default duration of time that the composite event should last. The higher-order component that `compose` returns takes an optional duration parameter. When that duration parameter is not specified or `undefined`, the `defaultDuration` is used. Using the [`withMouseRest` example](#withmouserest-example) , if instead `FancyDiv` was created without specifying a duration like:
+**(Optional)** A `number` of milliseconds indicating the default duration of time that the composite event should last. The higher-order component that `compose` returns takes an optional duration parameter. When that duration parameter is not specified or `undefined`, the `defaultDuration` is used. Using the [`withMouseRest` example](#withmouserest-example) , if instead `EnhancedDiv` was created without specifying a duration like:
 
 ```js
-const FancyDiv = withMouseRest()('div')
+const EnhancedDiv = withMouseRest()('div')
 ```
 
-Then `FancyDiv` will use the `defaultDuration` of 150 (milliseconds). As a result of not specifying a duration, the `onMouseRest` prop will not be parameterized:
+Then `EnhancedDiv` will use the `defaultDuration` of 150 (milliseconds). As a result of not specifying a duration, the `onMouseRest` prop will not be parameterized:
 
 ```js
-const FancyDiv = withMouseRest()('div');
+const EnhancedDiv = withMouseRest()('div');
 
 export default MyComponent extends PureComponent {
   _handleMouseRest() {
@@ -75,9 +87,9 @@ export default MyComponent extends PureComponent {
   render() {
     // Pass handler to `onMouseRest` composite event prop
     return (
-      <FancyDiv onMouseRest={this._handleMouseRest.bind(this)}>
+      <EnhancedDiv onMouseRest={this._handleMouseRest.bind(this)}>
         Trigger event after mouse rests for default 150 milliseconds
-      </FancyDiv>
+      </EnhancedDiv>
     )
   }
 }
@@ -112,7 +124,7 @@ const withCtrlClick = compose({
 // `onCtrlClick` composite event prop available.
 // Because no `defaultDuration` was specified, the HOC takes
 // no parameters
-const FancyDiv = withCtrlClick()('div')
+const EnhancedDiv = withCtrlClick()('div')
 
 export default MyComponent extends PureComponent {
   _handleCtrlClick() {
@@ -122,9 +134,9 @@ export default MyComponent extends PureComponent {
   render() {
     // Pass handler to `onCtrlClick` composite event prop
     return (
-      <FancyDiv onCtrlClick={this._handleCtrlClick.bind(this)}>
+      <EnhancedDiv onCtrlClick={this._handleCtrlClick.bind(this)}>
         Trigger event after Ctrl+Click
-      </FancyDiv>
+      </EnhancedDiv>
     )
   }
 }
@@ -138,7 +150,7 @@ If the `cancelEvent` occurs before the timer ends, the composite event is not co
 
 ### `shouldResetTimerOnRetrigger`
 
-**(Optional)** A `boolean` specifying whether or not a [`triggerEvent`](#triggerevent) should reset the timer. If this optional configuration is not specified, then the value `true` will be used as a default.
+**(Optional)** A `boolean` specifying whether or not a [`triggerEvent`](#triggerevent) should reset the timer. If this optional configuration is not specified, then the value `true` will be used as the default.
 
 For the [`withMouseRest` example](#withmouserest-example), if another `onMouseOver` event happens after the initial one that began the composite event, the timer will be reset since `shouldResetTimerOnRetrigger` is `true`. This is because once the mouse starts moving, it's no longer at rest so the timer needs to be reset. If instead you were building a `mouseRemainOver` composite event where the mouse has to just remain over an element but can move around freely, `shouldResetTimerOnRetrigger` should be `false`. `onMouseMove` would trigger the composite event, and continuing to move shouldn't reset the timer. Additional `onMouseMove` events should just be ignored.
 
@@ -146,10 +158,20 @@ For the [`withMouseRest` example](#withmouserest-example), if another `onMouseOv
 
 ### `allowRefire`
 
-**(Optional)** TODO...
+**(Optional)** A `boolean` specifying whether or not the composite event should be allowed to be refired after it has already fired once and before a `cancelEvent` has been fired. If this optional configuration is not specified, then the value `true` will be used as the default.
 
 `allowRefire` is ignored if [`defaultDuration`](#defaultduration) is unspecified.
 
 ### `beforeCallback`
 
-**(Optional)** TODO...
+**(Optional)** A `function` that is called before composite event prop handler is ultimately called. The function receives two parameters: [`handler`](#handler) & [`event`](#event).
+
+The `beforeCallback` function is most useful when [`defaultDuration`](#defaultduration) is unspecified. In these cases you're wanting to build the composite event from additional information in the [`event`](#event), and not based on a timer. Within `beforeCallback` you will need to explicitly call the [`handler`](#handler) in order for the composite event prop handler to be called.
+
+#### `handler`
+
+A `function` that is the composite event prop handler. This is what React component passed as the value for the composite event prop. Within [`beforeCallback`](#beforecallback) you will need to explicitly call the `handler` in order for the composite event prop handler to be called.
+
+#### `event`
+
+**(Optional)** An event `object` for the `triggerEvent`. For composite events that aren't time-based, you can use the `event` object to help compose the composite event. Some components may not have event objects for the `triggerEvent`, in which case `event` will be `undefined`. On the web, DOM elements will pass a DOM event for `event`.
