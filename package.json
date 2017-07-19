@@ -16,13 +16,13 @@
   "scripts": {
     "format": "prettier-eslint --write 'src/**/*.js'",
     "lint": "eslint src",
-    "precommit": "lint-staged",
+    "precommit": "lint-staged && npm run validate",
     "test": "jest --verbose",
-    "validate": "yarn run lint && yarn test"
+    "validate": "npm run lint && npm test"
   },
   "lint-staged": {
     "*.js": [
-      "yarn run format",
+      "npm run format",
       "git add"
     ]
   },
