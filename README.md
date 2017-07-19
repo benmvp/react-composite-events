@@ -1,15 +1,15 @@
 # Composite Events for React
 
-[![version](https://img.shields.io/npm/v/react-composite-events.svg?style=flat-square)](http://npm.im/react-composite-events)
-[![downloads](https://img.shields.io/npm/dt/react-composite-events.svg?style=flat-square)](http://npm-stat.com/charts.html?package=react-composite-events&from=2016-03-27)
-![module formats: umd, cjs, and es](https://img.shields.io/badge/module%20formats-umd%2C%20cjs%2C%20es-green.svg?style=flat-square)
-[![license](https://img.shields.io/npm/l/react-composite-events.svg?style=flat-square)](LICENSE)
+[![version](https://img.shields.io/npm/v/react-composite-events.svg)](http://npm.im/react-composite-events)
+[![downloads](https://img.shields.io/npm/dt/react-composite-events.svg)](http://npm-stat.com/charts.html?package=react-composite-events&from=2017-07-18)
+![module formats: umd, cjs, and es](https://img.shields.io/badge/module%20formats-umd%2C%20cjs%2C%20es-green.svg)
+[![license](https://img.shields.io/github/license/benmvp/react-composite-events.svg)](LICENSE)
 
 [![Maintenance Status](https://img.shields.io/badge/status-maintained-brightgreen.svg)](https://github.com/benmvp/react-composite-events/pulse)
 [![Build Status](https://travis-ci.org/benmvp/react-composite-events.svg?branch=master)](https://travis-ci.org/benmvp/react-composite-events)
 [![Coverage Status](https://coveralls.io/repos/github/benmvp/react-composite-events/badge.svg?branch=master)](https://coveralls.io/github/benmvp/react-composite-events?branch=master)
-[![Dependencies status](https://img.shields.io/david/benmvp/react-composite-events.svg?style=flat-square)](https://david-dm.org/benmvp/react-composite-events#info=dependencies)
-[![Dev Dependencies status](https://img.shields.io/david/dev/benmvp/react-composite-events.svg?style=flat-square)](https://david-dm.org/benmvp/react-composite-events#info=devDependencies)
+[![Dependencies status](https://img.shields.io/david/benmvp/react-composite-events.svg)](https://david-dm.org/benmvp/react-composite-events#info=dependencies)
+[![Dev Dependencies status](https://img.shields.io/david/dev/benmvp/react-composite-events.svg)](https://david-dm.org/benmvp/react-composite-events#info=devDependencies)
 
 [![Watch on GitHub](https://img.shields.io/github/watchers/benmvp/react-composite-events.svg?style=social)](https://github.com/benmvp/react-composite-events/watchers)
 [![Star on GitHub](https://img.shields.io/github/stars/benmvp/react-composite-events.svg?style=social)](https://github.com/benmvp/react-composite-events/stargazers)
