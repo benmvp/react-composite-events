@@ -7,13 +7,18 @@ node_js:
 # Cache dependencies in $HOME/.yarn-cache across builds
 cache: yarn
 
-# Run the the validate script
-# script: yarn run validate:coverage
-script: yarn run validate
-
+# Run the the validate script with code coverage
+script: yarn run validate -- -- --coverage
 
 # Send coverage data to Coveralls
-# after_success: yarn run coveralls
+after_success:
+  - yarn global add coveralls
+  - cat ./coverage/lcov.info | coveralls
+
+# Only run CI on master branch
+branches:
+  only:
+    - master
 
 # Build dist files
 # before_deploy: yarn run bundle:web

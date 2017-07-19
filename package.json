@@ -17,8 +17,8 @@
     "format": "prettier-eslint --write 'src/**/*.js'",
     "lint": "eslint src",
     "precommit": "lint-staged",
-    "test": "jest",
-    "validate": "yarn run lint && yarn run test"
+    "test": "jest --verbose",
+    "validate": "yarn run lint && yarn test"
   },
   "lint-staged": {
     "*.js": [
@@ -42,10 +42,17 @@
   "eslintConfig": {
     "extends": "eventbrite-react",
     "rules": {
+      "indent": [
+        "error",
+        2
+      ],
       "semi": [
         "error",
         "never"
       ]
+    },
+    "env": {
+      "jest": true
     }
   },
   "peerDependencies": {
@@ -68,7 +75,7 @@
     "lint-staged": "^4.0.1",
     "prettier-eslint-cli": "^4.1.1",
     "prop-types": "^15.5.10",
-    "react": "16.0.0-alpha.13",
+    "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-test-renderer": "^15.6.1"
   }
