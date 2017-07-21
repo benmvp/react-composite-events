@@ -75,6 +75,8 @@ The above call would make a parameterized composite event higher-order component
 
 **(Required)** A `string` name of an event or `Array<String>` of event names that trigger(s) the start of the composite event.
 
+> The handler for the composite event will receive the event object from the `triggerEvent`, if it exists.
+
 > If the `triggerEvent` matches an event passed to the enhanced component, it will be merged. For instance in the [`withMouseRest` example](#withmouserest-example), `onMouseOver` is one of the trigger events. If an `onMouseOver` handler was also passed to `<EnhancedDiv>` in addition `onMouseRest-500`, it will also be called.
 
 ## `defaultDuration`

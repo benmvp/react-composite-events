@@ -36,7 +36,7 @@ index.js
 
 ### Helpers
 
-input/index.js
+general/index.js
 
 - `withLongPress(duration)`
 - ~~`withRemainPressed(duration)`~~

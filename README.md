@@ -70,7 +70,7 @@ Imagine a navigation menu that displays on hover. You don't want the menu activa
 
 A "React Composite Event" is an event for a component that is not part of its standard set of events, but is implemented in supplemental JavaScript code. It can be an event happening over time. In the case of DOM events, it can be a filter of existing DOM events.
 
-React composite events were originally considered only in the context of DOM events. But with React Native and the proliferation of other non-DOM React environments, there are some composite events that do not assume a DOM environment (particularly the [input-related composite events](input/)).
+React composite events were originally considered only in the context of DOM events. But with React Native and the proliferation of other non-DOM React environments, there are some composite events that do not assume a DOM environment (particularly the [general composite events](general/)).
 
 A rather compelling and highly practical example is the "remain-in-state" DOM-related composite events. These allow handlers to be executed when a node remains in a specific event state for a specified amount of time (i.e. the user rests the mouse over a node for more than half a second).
 
@@ -101,9 +101,9 @@ This may sound a little abstract, but what this means is that you can tune the b
 The React Composite Event HOCs are grouped by domain:
 
 - [**Base**](src/) - (advanced) the base HOC composer from which all other HOCs are built
-- [**Input**](input/) - the HOCs that create composite events with inputs (intended to be environment-agnostic)
-- [**Mouse**](mouse/) - the HOCs that create composite events around DOM mouse events
-- [**Key**](key/) - the HOCs that create composite events around DOM keyboard events
+- [**General**](src/general/) - general HOCs that create composite events intended to be environment-agnostic
+- [**Mouse**](src/mouse/) - the HOCs that create composite events around DOM mouse events
+- [**Key**](src/key/) - the HOCs that create composite events around DOM keyboard events
 
 ## Contributing
 
@@ -113,7 +113,7 @@ Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for more detai
 
 We take the stability of this utility package **very** seriously. `react-composite-events` follows the [SemVer](http://semver.org/) standard for versioning.
 
-All updates must pass the [CI build](https://travis-ci.org/benmvp/react-composite-events).
+All updates must pass the [CI build](https://travis-ci.org/benmvp/react-composite-events) while maintaining [100% code coverage](https://coveralls.io/github/benmvp/react-composite-events).
 
 ## License
 
