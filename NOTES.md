@@ -38,22 +38,22 @@ index.js
 
 input/index.js
 
-- ~~`withLongPress`~~
-- `withRemainPressed(duration)`
-- `withRemainUnpressed(duration)`
+- `withLongPress(duration)`
+- ~~`withRemainPressed(duration)`~~
+- `withRemainReleased(duration)`
 - `withRemainBlurred(duration)`
 - `withRemainFocused(duration)`
 
-- `composeFirstAction(eventName)`
-- `composeRepeatAction(eventName, times, maxInterval)`
+- `composeFirst(eventName)`
+- `composeRepeat(eventName, times, maxInterval)`
 - `withFirstPress`
 - `withRepeatPress(times, maxInterval)`
 
 mouse/index.js
 
+- `withMouseRest(duration)`
 - `withMouseRemainOut(duration)`
 - `withMouseRemainOver(duration)`
-- `withMouseRest(duration)`
 
 - `withMouseEnterLeft`
 - `withMouseEnterRight`

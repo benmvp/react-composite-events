@@ -1,7 +1,7 @@
 {
   "name": "react-composite-events",
   "version": "0.0.1",
-  "description": "Easily create composite events for transparent use in React components",
+  "description": "A collection of higher-order components (HOCs) to easily create composite events in React components",
   "author": "Ben Ilegbodu <ben@benmvp.com>",
   "main": "dist/react-composite-events.cjs.js",
   "repository": {
@@ -9,9 +9,9 @@
     "url": "https://github.com/benmvp/react-composite-events.git"
   },
   "bugs": {
-    "url": "https://github.com/paypal/glamorous/issues"
+    "url": "https://github.com/benmvp/react-composite-events/issues"
   },
-  "homepage": "https://github.com/paypal/glamorous#readme",
+  "homepage": "https://github.com/benmvp/react-composite-events#readme",
   "license": "MIT",
   "scripts": {
     "format": "prettier-eslint --write 'src/**/*.js'",
