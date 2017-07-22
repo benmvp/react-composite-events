@@ -21,6 +21,17 @@ A collection of higher-order components (HOCs) to easily create composite events
 
 `react-composite-events` is heavily inspired by the [`Uize.Dom.VirtualEvent`](https://github.com/UIZE/UIZE-JavaScript-Framework/blob/master/site-source/js/Uize/Dom/VirtualEvent.js) module that is a part of the open-source [UIZE JavaScript Framework](https://github.com/UIZE/UIZE-JavaScript-Framework).
 
+## ToC
+
+- [Installation](#installation)
+- [Quick Usage](#quick-usage)
+- [What is a Composite Event?](#what-is-a-composite-event)
+- [Benefits of Composite Events](#benefits-of-composite-events)
+- [API Docs](#api-docs)
+- [Contributing](CONTRIBUTING.md)
+- [Project philosophy](#project-philosophy)
+- [License](LICENSE)
+
 ## Installation
 
 Install via [Yarn](https://yarnpkg.com/lang/en/docs/managing-dependencies/):
@@ -66,27 +77,27 @@ export default MyComponent extends PureComponent {
 
 Imagine a navigation menu that displays on hover. You don't want the menu activated just when the user passes over the menu. You want it to activate when they've rested on the menu for a "short while" to indicate their interest. `onMouseOver` will trigger even if the mouse is just passing over an element, whereas the `onMouseRest` composite event will trigger only after the user has lingered for a bit. The "mouse rest" composite event is a better solution than a simple `onMouseOver`.
 
-## What is a React Composite Event?
+## What is a Composite Event?
 
-A "React Composite Event" is an event for a component that is not part of its standard set of events, but is implemented in supplemental JavaScript code. It can be an event happening over time. In the case of DOM events, it can be a filter of existing DOM events.
+A "composite event" is an event for a component that is not part of its standard set of events, but is implemented in supplemental JavaScript code. It can be an event happening over time. In the case of DOM events, it can be a filter of existing DOM events.
 
-React composite events were originally considered only in the context of DOM events. But with React Native and the proliferation of other non-DOM React environments, there are some composite events that do not assume a DOM environment (particularly the [general composite events](general/)).
+Composite events were originally considered only in the context of DOM events. But with React Native and the proliferation of other non-DOM React environments, there are some composite events that do not assume a DOM environment (particularly the [general composite events](general/)).
 
 A rather compelling and highly practical example is the "remain-in-state" DOM-related composite events. These allow handlers to be executed when a node remains in a specific event state for a specified amount of time (i.e. the user rests the mouse over a node for more than half a second).
 
-## Benefits of React Composite Events
+## Benefits of Composite Events
 
-React Composite Events offer the following key benefits...
+Composite events offer the following key benefits...
 
 ### Encapsulation
 
-React Composite Events allow sophisticated interactions with a component to be encapsulated into an implementation, so that the interaction can then be expressed as a single event.
+Composite events allow sophisticated interactions with a component to be encapsulated into an implementation, so that the interaction can then be expressed as a single event.
 
-Once a pattern of interaction is encapsulated into an implementation, you can then simply think of that interaction as its own event. The [What is a React Composite Event?](#what-is-a-react-composite-event) section discusses the classic example of the "mouse rest" composite event, which encapsulates handling `onMouseOver`, `onMouseMove`, `onMouseOut`, and `onMouseDown` events of a DOM node, and also manages state for a timeout.
+Once a pattern of interaction is encapsulated into an implementation, you can then simply think of that interaction as its own event. The [What is a Composite Event?](#what-is-a-composite-event) section discusses the classic example of the "mouse rest" composite event, which encapsulates handling `onMouseOver`, `onMouseMove`, `onMouseOut`, and `onMouseDown` events of a DOM node, and also manages state for a timeout.
 
 ### Semantically Equivalent to Real Events
 
-React Composite Events are semantically equivalent to actual events on a component. These events are "injected" into a component as props by wrapping it in a higher-order component (HOC).
+Composite events are semantically equivalent to actual events on a component. These events are "injected" into a component as props by wrapping it in a higher-order component (HOC).
 
 This means that you can use them and think about them in your React apps as if they **were** actual events on a component. This also means that you can add handlers for composite events along with actual component events.
 
@@ -98,7 +109,7 @@ This may sound a little abstract, but what this means is that you can tune the b
 
 ## API Docs
 
-The React Composite Event HOCs are grouped by domain:
+The Composite Event HOCs are grouped by domain:
 
 - [**Base**](src/) - (advanced) the base HOC composer from which all other HOCs are built
 - [**General**](src/general/) - general HOCs that create composite events intended to be environment-agnostic
@@ -107,7 +118,7 @@ The React Composite Event HOCs are grouped by domain:
 
 ## Contributing
 
-Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
+Contributions are welcome! See [CONTRIBUTING](CONTRIBUTING.md) for more details.
 
 ## Project philosophy
 

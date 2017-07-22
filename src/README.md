@@ -4,11 +4,11 @@
 compose({
   eventPropName: string,
   triggerEvent: string | Array<string>,
-  defaultDuration: integer,
-  cancelEvent: string | Array<string>,
-  shouldResetTimerOnRetrigger: boolean,
-  allowRefire: boolean,
-  beforeCallback: (handler: Function, ?event: Object) => void
+  ?defaultDuration: integer = 0,
+  ?cancelEvent: string | Array<string>,
+  ?shouldResetTimerOnRetrigger: boolean = true,
+  ?allowRefire: boolean = true,
+  ?beforeCallback: (handler: Function, ?event: Object) => void
 }): HigherOrderComponent
 ```
 

@@ -21,7 +21,7 @@ The following collection of general composite event APIs that are intended to be
 
 ```js
 withLongPress
-  duration: integer = 1250
+  ?duration: integer = 1250
 ): HigherOrderComponent
 ```
 
@@ -84,7 +84,7 @@ See related [`withRemainReleased()`](#withremainreleased).
 
 ```js
 withRemainReleased
-  duration: integer = 500
+  ?duration: integer = 500
 ): HigherOrderComponent
 ```
 
@@ -142,7 +142,7 @@ See related [`withLongPress()`](#withlongpress).
 
 ```js
 withRemainFocused
-  duration: integer = 500
+  ?duration: integer = 500
 ): HigherOrderComponent
 ```
 
@@ -196,7 +196,7 @@ See related [`withRemainBlurred()`](#withremainblurred).
 
 ```js
 withRemainBlurred
-  duration: integer = 500
+  ?duration: integer = 500
 ): HigherOrderComponent
 ```
 
@@ -248,13 +248,13 @@ See related [`withRemainFocused()`](#withremainfocused).
 
 ### `withFirstPress()`
 
-TODO...
+Coming soon...
 
 
 
 ### `withRepeatPress()`
 
-TODO...
+Coming soon...
 
 
 
@@ -262,10 +262,10 @@ TODO...
 
 ### `composeFirst()`
 
-TODO...
+Coming soon...
 
 
 
 ### `composeRepeat()`
 
-TODO...
+Coming soon...
