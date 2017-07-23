@@ -24,11 +24,6 @@ after_success:
   # 3. Generate changelog + release on Github
   # - semantic-release pre && npm publish && semantic-release post
 
-# Only run CI on master branch
-branches:
-  only:
-    - master
-
 # Build dist files
 # before_deploy: yarn run bundle:web
 
