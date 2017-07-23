@@ -13,7 +13,8 @@ script: yarn run validate -- -- --coverage
 # Scripts to run after validation tests run
 after_success:
   # Install some packages globally we'll need
-  - yarn global add coveralls semantic-release
+  # - yarn global add coveralls semantic-release
+  - yarn global add coveralls
 
   # Retrieve the coverage informatino and send it to Coveralls
   - cat ./coverage/lcov.info | coveralls
@@ -21,12 +22,7 @@ after_success:
   # 1. Update package.json version number based on commits
   # 2. Publish new version to NPM
   # 3. Generate changelog + release on Github
-  - semantic-release pre && npm publish && semantic-release post
-
-# Only run CI on master branch
-branches:
-  only:
-    - master
+  # - semantic-release pre && npm publish && semantic-release post
 
 # Build dist files
 # before_deploy: yarn run bundle:web
