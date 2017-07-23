@@ -3,6 +3,7 @@
 [![version](https://img.shields.io/npm/v/react-composite-events.svg)](http://npm.im/react-composite-events)
 [![downloads](https://img.shields.io/npm/dt/react-composite-events.svg)](http://npm-stat.com/charts.html?package=react-composite-events&from=2017-07-18)
 ![module formats: umd, cjs, and es](https://img.shields.io/badge/module%20formats-umd%2C%20cjs%2C%20es-green.svg)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 [![license](https://img.shields.io/github/license/benmvp/react-composite-events.svg)](LICENSE)
 
 [![Maintenance Status](https://img.shields.io/badge/status-maintained-brightgreen.svg)](https://github.com/benmvp/react-composite-events/pulse)
@@ -13,13 +14,13 @@
 
 [![Watch on GitHub](https://img.shields.io/github/watchers/benmvp/react-composite-events.svg?style=social)](https://github.com/benmvp/react-composite-events/watchers)
 [![Star on GitHub](https://img.shields.io/github/stars/benmvp/react-composite-events.svg?style=social)](https://github.com/benmvp/react-composite-events/stargazers)
-[![Tweet](https://img.shields.io/twitter/url/https/github.com/benmvp/react-composite-events.svg?style=social)](https://twitter.com/intent/tweet?text=Check%20out%20react-composite-events!%20https://github.com/benmvp/react-composite-events%20%F0%9F%91%8D)
+[![Tweet](https://img.shields.io/twitter/url/https/github.com/benmvp/react-composite-events.svg?style=social)](https://twitter.com/intent/tweet?text=Check%20out%20react-composite-events%20by%20%40benmvp!%0A%0Ahttps%3A%2F%2Fgithub.com%2Fbenmvp%2Freact-composite-events)
 
 A collection of higher-order components (HOCs) to easily create composite events in React components.
 
-> `react-composite-events` is currently under initial API design and not available for public use! Check out the [API Docs](#api-docs) and [Notes](NOTES.md) for more info.
+> `react-composite-events` is currently under initial API design and not available for public use! Check out the [API Docs](#api-docs) for more info.
 
-`react-composite-events` is heavily inspired by the [`Uize.Dom.VirtualEvent`](https://github.com/UIZE/UIZE-JavaScript-Framework/blob/master/site-source/js/Uize/Dom/VirtualEvent.js) module that is a part of the open-source [UIZE JavaScript Framework](https://github.com/UIZE/UIZE-JavaScript-Framework).
+`react-composite-events` is heavily inspired by the [`Uize.Dom.VirtualEvent`](https://github.com/UIZE/UIZE-JavaScript-Framework/blob/master/site-source/js/Uize/Dom/VirtualEvent.js) module that is a part of the open-source [UIZE JavaScript Framework](https://github.com/UIZE/UIZE-JavaScript-Framework). It is stable, [dependency-free](https://david-dm.org/benmvp/react-composite-events#info=dependencies), [heavily-tested](https://coveralls.io/github/benmvp/react-composite-events?branch=master) and [well-documented](#api-docs).
 
 ## ToC
 
@@ -51,13 +52,13 @@ npm install --save react-composite-events
 You use composite events by wrapping a component in a higher-order component (HOC) that will provide a handler to the composite event:
 
 ```js
-// import `addMouseRest` HOC
-import {addMouseRest} from 'react-composite-events/mouse'
+// import `withMouseRest` HOC
+import {withMouseRest} from 'react-composite-events/mouse'
 
-// wrap div with `addMouseRest` HOC configured to fire event
+// wrap div with `withMouseRest` HOC configured to fire event
 // after 150 milliseconds. This will make a `onMouseRest-150`
 // composite event prop available
-const EnhancedDiv = addMouseRest(150)('div')
+const EnhancedDiv = withMouseRest(150)('div')
 
 export default MyComponent extends PureComponent {
   _handleMouseRest() {
@@ -76,6 +77,8 @@ export default MyComponent extends PureComponent {
 ```
 
 Imagine a navigation menu that displays on hover. You don't want the menu activated just when the user passes over the menu. You want it to activate when they've rested on the menu for a "short while" to indicate their interest. `onMouseOver` will trigger even if the mouse is just passing over an element, whereas the `onMouseRest` composite event will trigger only after the user has lingered for a bit. The "mouse rest" composite event is a better solution than a simple `onMouseOver`.
+
+Check out the docs for [`withMouseRest()`](src/mouse/#withmouserest) or the rest of the [API Docs](#api-docs).
 
 ## What is a Composite Event?
 
@@ -118,7 +121,7 @@ The Composite Event HOCs are grouped by domain:
 
 ## Contributing
 
-Contributions are welcome! See [CONTRIBUTING](CONTRIBUTING.md) for more details.
+Contributions are welcome! See [Contributing Guidelines](CONTRIBUTING.md) for more details.
 
 ## Project philosophy
 
