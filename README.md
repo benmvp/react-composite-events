@@ -84,7 +84,7 @@ Check out the docs for [`withMouseRest()`](src/mouse/#withmouserest) or the rest
 
 A "composite event" is an event for a component that is not part of its standard set of events, but is implemented in supplemental JavaScript code. It can be an event happening over time. In the case of DOM events, it can be a filter of existing DOM events.
 
-Composite events were originally considered only in the context of DOM events. But with React Native and the proliferation of other non-DOM React environments, there are some composite events that do not assume a DOM environment (particularly the [general composite events](general/)).
+Composite events were originally considered only in the context of DOM events. But with React Native and the proliferation of other non-DOM React environments, there are some composite events that do not assume a DOM environment (particularly the [generic composite events](generic/)).
 
 A rather compelling and highly practical example is the "remain-in-state" DOM-related composite events. These allow handlers to be executed when a node remains in a specific event state for a specified amount of time (i.e. the user rests the mouse over a node for more than half a second).
 
@@ -115,7 +115,7 @@ This may sound a little abstract, but what this means is that you can tune the b
 The Composite Event HOCs are grouped by domain:
 
 - [**Base**](src/) - (advanced) the base HOC composer from which all other HOCs are built
-- [**General**](src/general/) - general HOCs that create composite events intended to be environment-agnostic
+- [**Generic**](src/generic/) - geneirc HOCs that create composite events intended to be environment-agnostic
 - [**Mouse**](src/mouse/) - the HOCs that create composite events around DOM mouse events
 - [**Key**](src/key/) - the HOCs that create composite events around DOM keyboard events
 
