@@ -3,12 +3,12 @@
 ```js
 compose({
   eventPropName: string,
-  triggerEvent: string | Array<string>,
-  ?defaultDuration: integer = 0,
-  ?cancelEvent: string | Array<string>,
+  triggerEvent: string | string[],
+  ?defaultDuration: number = 0,
+  ?cancelEvent: string | string[],
   ?shouldResetTimerOnRetrigger: boolean = true,
   ?allowRefire: boolean = true,
-  ?beforeCallback: (handler: Function, ?event: Object) => void
+  ?beforeCallback: (handler: (?event: Event) => void, ?event: Event) => void
 }): HigherOrderComponent
 ```
 
@@ -37,9 +37,9 @@ import {compose} from 'react-composite-events'
 // options to `compose`
 const withMouseRest = compose({
   eventPropName: 'onMouseRest',
-  triggerEvent: ['onMouseOver','onMouseMove'],
+  triggerEvent: ['onMouseOver', 'onMouseMove'],
   defaultDuration: 150,
-  cancelEvent: ['onMouseOut','onMouseDown'],
+  cancelEvent: ['onMouseOut', 'onMouseDown'],
   shouldResetTimerOnRetrigger: true,
   allowRefire: false,
 })
@@ -73,7 +73,7 @@ The above call would make a parameterized composite event higher-order component
 
 ## `triggerEvent`
 
-**(Required)** A `string` name of an event or `Array<String>` of event names that trigger(s) the start of the composite event.
+**(Required)** A `string` name of an event or `string[]` of event names that trigger(s) the start of the composite event.
 
 > The handler for the composite event will receive the event object from the `triggerEvent`, if it exists.
 
@@ -81,7 +81,7 @@ The above call would make a parameterized composite event higher-order component
 
 ## `defaultDuration`
 
-**(Optional)** A `integer` of milliseconds indicating the default duration of time that the composite event should last. The higher-order component that `compose` returns takes an optional duration parameter. When that duration parameter is not specified or `undefined`, the `defaultDuration` is used. Using the [`withMouseRest` example](#withmouserest-example), if instead `EnhancedDiv` was created without specifying a duration like:
+**(Optional)** A `number` of milliseconds indicating the default duration of time that the composite event should last. The higher-order component that `compose` returns takes an optional duration parameter. When that duration parameter is not specified or `undefined`, the `defaultDuration` is used. Using the [`withMouseRest` example](#withmouserest-example), if instead `EnhancedDiv` was created without specifying a duration like:
 
 ```js
 const EnhancedDiv = withMouseRest()('div')
@@ -157,9 +157,11 @@ export default MyComponent extends PureComponent {
 
 ## `cancelEvent`
 
-**(Optional)** A `string` name of an event or `Array<String>` of event names that cancel(s) the timer started by [`triggerEvent`](#triggerevent) when a [`defaultDuration`](#defaultduration) is specified.
+**(Optional)** A `string` name of an event or `string[]` of event names that cancel(s) the timer started by [`triggerEvent`](#triggerevent) when a [`defaultDuration`](#defaultduration) is specified.
 
 If the `cancelEvent` occurs before the timer ends, the composite event is not completed and its handler will not be called. `cancelEvent` is ignored if [`defaultDuration`](#defaultduration) is unspecified.
+
+> If the `cancelEvent` matches an event passed to the enhanced component, it will be merged. For instance in the [`withMouseRest` example](#withmouserest-example), `onMouseOut` is one of the trigger events. If an `onMouseOut` handler was also passed to `<EnhancedDiv>` in addition `onMouseRest-500`, it will also be called.
 
 ## `shouldResetTimerOnRetrigger`
 
