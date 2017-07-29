@@ -60,6 +60,16 @@ describe('compose', () => {
       expect(compositeEventHOC).not.toBeNull()
       expect(compositeEventHOC).toBeInstanceOf(Function)
     })
+
+    it('throws an error when no component is passed to the resultant HOC', () => {
+      const withCompositeEvent = compose({
+        eventPropName: 'onCompositeEvent',
+        triggerEvent: 'onDummyEvent',
+      })
+
+      // throws an error because no Component was specified
+      expect(() => withCompositeEvent()()).toThrow()
+    })
   })
 
   describe('simple cases', () => {
