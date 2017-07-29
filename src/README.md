@@ -163,6 +163,8 @@ If the `cancelEvent` occurs before the timer ends, the composite event is not co
 
 > If the `cancelEvent` matches an event passed to the enhanced component, it will be merged. For instance in the [`withMouseRest` example](#withmouserest-example), `onMouseOut` is one of the trigger events. If an `onMouseOut` handler was also passed to `<EnhancedDiv>` in addition `onMouseRest-500`, it will also be called.
 
+> If a [`triggerEvent`](#triggerevent) is also a `cancelEvent`, the composite event will never trigger; it will be immediately cancelled.
+
 ## `shouldResetTimerOnRetrigger`
 
 **(Optional)** A `boolean` specifying whether or not a [`triggerEvent`](#triggerevent) should reset the timer. If this optional configuration is not specified, then the value `true` will be used as the default.

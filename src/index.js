@@ -4,14 +4,13 @@ import toLookup from 'array-to-lookup'
 import omit from 'lodash.omit'
 
 const _eventNamesToHandlerLookup = (eventNames, handler) =>
-  eventNames.reduce(
+  (eventNames || []).reduce(
     (lookup, eventName) => ({
       ...lookup,
       [eventName]: handler.bind(null, eventName),
     }),
     {}
   )
-
 const _isValidDuration = (duration) => duration > 0
 
 export const compose = ({
@@ -33,7 +32,8 @@ export const compose = ({
   let triggerEvents = Array.isArray(triggerEvent)
     ? triggerEvent
     : [triggerEvent]
-  let cancelEvents = Array.isArray(cancelEvent) ? cancelEvent : [cancelEvent]
+  let cancelEvents =
+    !cancelEvent || Array.isArray(cancelEvent) ? cancelEvent : [cancelEvent]
 
   return (duration) => {
     let timeoutDuration = defaultDuration
@@ -72,14 +72,19 @@ export const compose = ({
 
         _delayTimeout = null
 
-        _handleTriggerEvent = (eventName, e) => {
+        _callSpecificHandler = (eventName, e) => {
           let onEvent = this.props[eventName]
-          let onCompositeEvent = this.props[compositeEventPropName]
 
-          // If a specific handler was passed, call that one first
           if (onEvent) {
             onEvent(e)
           }
+        }
+
+        _handleTriggerEvent = (eventName, e) => {
+          let onCompositeEvent = this.props[compositeEventPropName]
+
+          // If a specific handler was passed, call that one first
+          this._callSpecificHandler(eventName, e)
 
           // Call the composite event handler
           if (onCompositeEvent) {
@@ -94,21 +99,42 @@ export const compose = ({
           }
         }
 
+        _handleCancelEvent = (eventName, e) => {
+          // If a specific handler was passed, call that one first
+          this._callSpecificHandler(eventName, e)
+
+          // just cancel the timeout so composite handler won't be called
+          clearTimeout(this._delayTimeout)
+        }
+
         render() {
           // Want to pass all the props through to the underlying Component except the passed
           // compositeEventPropName, which we need to handle specially.
           // This will also include separate specific handlers matching trigger & cancel events
           let passThruProps = omit(this.props, [compositeEventPropName])
 
-          // Create an object mapping of the trigger events to handlers.
-          // The handler needs to bind the trigger event name so that we can check to see if
-          // a specific handler was specify so we can fire that too
+          // Create an object mapping of the trigger/cancel events to handlers.
+          // The handler needs to bind the event name so that we can check to see if
+          // a specific handler was specified so we can fire that too
           let triggerEventHandlers = _eventNamesToHandlerLookup(
             triggerEvents,
             this._handleTriggerEvent
           )
+          let cancelEventHandlers = _eventNamesToHandlerLookup(
+            cancelEvents,
+            this._handleCancelEvent
+          )
 
-          return <Component {...passThruProps} {...triggerEventHandlers} />
+          // As a result of cancelEventHandlers going after triggerEventHandlers below, if
+          // a cancel event matches a trigger event, the composite event will never be triggered
+
+          return (
+            <Component
+              {...passThruProps}
+              {...triggerEventHandlers}
+              {...cancelEventHandlers}
+            />
+          )
         }
       }
     }
