@@ -12,10 +12,12 @@ const _eventNamesToHandlerLookup = (eventNames, handler) =>
     {}
   )
 
+const _isValidDuration = (duration) => duration > 0
+
 export const compose = ({
   eventPropName,
   triggerEvent,
-  // defaultDuration = 0,
+  defaultDuration = 0,
   cancelEvent,
   // shouldResetTimerOnRetrigger = true,
   // allowRefire = true,
@@ -34,16 +36,29 @@ export const compose = ({
   let cancelEvents = Array.isArray(cancelEvent) ? cancelEvent : [cancelEvent]
 
   return (duration) => {
+    let timeoutDuration = defaultDuration
+    let durationSuffix = ''
+
+    // if defaultDuration is specified and there's a duration override,
+    // use the override. Otherwise there's no timeout happening
+    if (_isValidDuration(defaultDuration) && _isValidDuration(duration)) {
+      timeoutDuration = duration
+      durationSuffix = `-${duration}`
+    }
+
     // if the duration is passed the composite even prop name needs to be parameterized
-    let compositeEventPropName =
-      eventPropName + (duration ? `-${duration}` : '')
+    let compositeEventPropName = `${eventPropName}${durationSuffix}`
 
     return (Component) => {
+      if (!Component) {
+        throw new Error('Component to enhance must be specified')
+      }
+
       let componentDisplayName =
-        Component.displayName || Component.name || 'Component'
+        Component.displayName || Component.name || Component
 
       return class extends PureComponent {
-        static displayName = `${componentDisplayName}WithCompositeEvent`
+        static displayName = `${componentDisplayName}-${eventPropName}${durationSuffix}`
 
         // Defining the known prop types that *could* be passed
         // * the composite event (most likely)
@@ -54,6 +69,8 @@ export const compose = ({
           ...toLookup(cancelEvents, PropTypes.func),
           [compositeEventPropName]: PropTypes.func,
         }
+
+        _delayTimeout = null
 
         _handleTriggerEvent = (eventName, e) => {
           let onEvent = this.props[eventName]
@@ -66,7 +83,14 @@ export const compose = ({
 
           // Call the composite event handler
           if (onCompositeEvent) {
-            onCompositeEvent(e)
+            if (_isValidDuration(timeoutDuration)) {
+              this._delayTimeout = setTimeout(
+                () => onCompositeEvent(e),
+                timeoutDuration
+              )
+            } else {
+              onCompositeEvent(e)
+            }
           }
         }
 
