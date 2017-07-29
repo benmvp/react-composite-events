@@ -21,10 +21,7 @@
     "validate": "npm run lint && npm test"
   },
   "lint-staged": {
-    "*.js": [
-      "npm run format",
-      "git add"
-    ]
+    "*.js": ["npm run format", "git add"]
   },
   "babel": {
     "presets": [
@@ -32,10 +29,8 @@
         "env",
         {
           "targets": {
-            "node": "4.5",
-            "browsers": [
-              "last 2 versions"
-            ]
+            "node": "4",
+            "browsers": ["last 2 versions"]
           }
         }
       ],
@@ -47,23 +42,11 @@
   "eslintConfig": {
     "extends": "eventbrite-react",
     "rules": {
-      "indent": [
-        "error",
-        2
-      ],
+      "indent": ["error", 2],
       "no-invalid-this": "off",
-      "semi": [
-        "error",
-        "never"
-      ],
-      "react/jsx-indent": [
-        "error",
-        2
-      ],
-      "react/jsx-indent-props": [
-        "error",
-        2
-      ]
+      "semi": ["error", "never"],
+      "react/jsx-indent": ["error", 2],
+      "react/jsx-indent-props": ["error", 2]
     },
     "env": {
       "jest": true
