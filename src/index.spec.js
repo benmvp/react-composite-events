@@ -1186,7 +1186,309 @@ describe('compose', () => {
     })
   })
 
-  describe('`shouldResetTimerOnRetrigger` config', () => {})
+  describe('`shouldResetTimerOnRetrigger` config', () => {
+    it('resets timer on retrigger by default (single `triggerEvent`)', () => {
+      const withCompositeEvent = compose({
+        eventPropName: 'onCompositeEvent',
+        triggerEvent: 'onDummyEvent',
+        defaultDuration: 1000,
+      })
+      const EnhancedDummy = withCompositeEvent()(Dummy)
+
+      let onCompositeEvent = jest.fn()
+      let wrapper = shallow(
+        <EnhancedDummy onCompositeEvent={onCompositeEvent} />
+      )
+      let dummyWrapper = wrapper.find(Dummy)
+
+      // simulate dummy event
+      dummyWrapper.prop('onDummyEvent')()
+
+      // fast forward some time
+      jest.runTimersToTime(600)
+
+      // retrigger dummy event
+      // should also reset timer
+      dummyWrapper.prop('onDummyEvent')()
+
+      // fast forward past initial delay
+      jest.runTimersToTime(600)
+
+      // should not fire composite event because of timer reset
+      expect(onCompositeEvent).toHaveBeenCalledTimes(0)
+
+      // fast forward past timer reset delay
+      jest.runTimersToTime(600)
+
+      // now composite event should be fired
+      expect(onCompositeEvent).toHaveBeenCalledTimes(1)
+    })
+
+    it('resets timer on retrigger by default (multiple `triggerEvent`)', () => {
+      const withCompositeEvent = compose({
+        eventPropName: 'onCompositeEvent',
+        triggerEvent: ['onDummyEventA', 'onDummyEventB', 'onDummyEventC'],
+        defaultDuration: 385,
+      })
+      const EnhancedDummy = withCompositeEvent()(Dummy)
+
+      let onCompositeEvent = jest.fn()
+      let wrapper = shallow(
+        <EnhancedDummy onCompositeEvent={onCompositeEvent} />
+      )
+      let dummyWrapper = wrapper.find(Dummy)
+
+      // simulate a dummy event
+      dummyWrapper.prop('onDummyEventC')()
+
+      // fast forward some time
+      jest.runTimersToTime(189)
+
+      // trigger a different dummy event
+      // should also reset timer
+      dummyWrapper.prop('onDummyEventB')()
+
+      // fast forward past initial delay
+      jest.runTimersToTime(200)
+
+      // should not fire composite event because of timer reset
+      expect(onCompositeEvent).toHaveBeenCalledTimes(0)
+
+      // fast forward past timer reset delay
+      jest.runTimersToTime(300)
+
+      // now composite event should be fired
+      expect(onCompositeEvent).toHaveBeenCalledTimes(1)
+    })
+
+    it('ignores retrigger when flag is off (single `triggerEvent`)', () => {
+      const withCompositeEvent = compose({
+        eventPropName: 'onCompositeEvent',
+        triggerEvent: 'onDummyEvent',
+        defaultDuration: 1000,
+        shouldResetTimerOnRetrigger: false,
+      })
+      const EnhancedDummy = withCompositeEvent()(Dummy)
+
+      let onCompositeEvent = jest.fn()
+      let wrapper = shallow(
+        <EnhancedDummy onCompositeEvent={onCompositeEvent} />
+      )
+      let dummyWrapper = wrapper.find(Dummy)
+
+      // simulate dummy event
+      dummyWrapper.prop('onDummyEvent')()
+
+      // fast forward some time
+      jest.runTimersToTime(600)
+
+      // retrigger dummy event
+      // should *not* reset timer and be ignored
+      dummyWrapper.prop('onDummyEvent')()
+
+      // fast forward past initial delay
+      jest.runTimersToTime(600)
+
+      // should fire composite event because there was no reset
+      expect(onCompositeEvent).toHaveBeenCalledTimes(1)
+
+      // fast forward past retrigger duration
+      jest.runTimersToTime(500)
+
+      // should not be called again because it was ignored
+      expect(onCompositeEvent).toHaveBeenCalledTimes(1)
+    })
+
+    it('ignores retrigger when flag is off (multiple `triggerEvent`)', () => {
+      const withCompositeEvent = compose({
+        eventPropName: 'onCompositeEvent',
+        triggerEvent: ['onDummyEventA', 'onDummyEventB', 'onDummyEventC'],
+        defaultDuration: 664,
+        shouldResetTimerOnRetrigger: false,
+      })
+      const EnhancedDummy = withCompositeEvent()(Dummy)
+
+      let onCompositeEvent = jest.fn()
+      let wrapper = shallow(
+        <EnhancedDummy onCompositeEvent={onCompositeEvent} />
+      )
+      let dummyWrapper = wrapper.find(Dummy)
+
+      // simulate dummy event
+      dummyWrapper.prop('onDummyEventB')()
+
+      // fast forward some time
+      jest.runTimersToTime(600)
+
+      // retrigger dummy event
+      // should *not* reset timer and be ignored
+      dummyWrapper.prop('onDummyEventA')()
+
+      // fast forward past initial delay
+      jest.runTimersToTime(200)
+
+      // should fire composite event because there was no reset
+      expect(onCompositeEvent).toHaveBeenCalledTimes(1)
+
+      // fast forward past retrigger duration
+      jest.runTimersToTime(500)
+
+      // should not be called again because it was ignored
+      expect(onCompositeEvent).toHaveBeenCalledTimes(1)
+    })
+
+    it('calls composite event normally with flag off', () => {
+      const withCompositeEvent = compose({
+        eventPropName: 'onCompositeEvent',
+        triggerEvent: 'onDummyEvent',
+        defaultDuration: 300,
+        shouldResetTimerOnRetrigger: false,
+      })
+      const EnhancedDummy = withCompositeEvent()(Dummy)
+
+      let onCompositeEvent = jest.fn()
+      let wrapper = shallow(
+        <EnhancedDummy onCompositeEvent={onCompositeEvent} />
+      )
+      let dummyWrapper = wrapper.find(Dummy)
+
+      // simulate dummy event
+      dummyWrapper.prop('onDummyEvent')()
+
+      // fast forward past duration
+      jest.runTimersToTime(398)
+
+      // should fire composite event because duration passed
+      expect(onCompositeEvent).toHaveBeenCalledTimes(1)
+    })
+
+    it('calls composite event normally with flag off & no default duration', () => {
+      const withCompositeEvent = compose({
+        eventPropName: 'onCompositeEvent',
+        triggerEvent: 'onDummyEvent',
+        shouldResetTimerOnRetrigger: false,
+      })
+      const EnhancedDummy = withCompositeEvent()(Dummy)
+
+      let onCompositeEvent = jest.fn()
+      let wrapper = shallow(
+        <EnhancedDummy onCompositeEvent={onCompositeEvent} />
+      )
+      let dummyWrapper = wrapper.find(Dummy)
+
+      // simulate dummy event
+      dummyWrapper.prop('onDummyEvent')()
+
+      // should fire composite event immediately
+      expect(onCompositeEvent).toHaveBeenCalledTimes(1)
+    })
+
+    it('still calls manual event when retriggers are ignored because flag is off', () => {
+      const withCompositeEvent = compose({
+        eventPropName: 'onCompositeEvent',
+        triggerEvent: 'onDummyEvent',
+        defaultDuration: 1000,
+        shouldResetTimerOnRetrigger: false,
+      })
+      const EnhancedDummy = withCompositeEvent()(Dummy)
+
+      let onCompositeEvent = jest.fn()
+      let onDummyEvent = jest.fn()
+      let wrapper = shallow(
+        <EnhancedDummy
+          onCompositeEvent={onCompositeEvent}
+          onDummyEvent={onDummyEvent}
+        />
+      )
+      let dummyWrapper = wrapper.find(Dummy)
+
+      // simulate dummy event
+      dummyWrapper.prop('onDummyEvent')()
+
+      // manual event should've been called
+      expect(onDummyEvent).toHaveBeenCalledTimes(1)
+
+      // fast forward some time
+      jest.runTimersToTime(600)
+
+      // retrigger dummy event
+      // should *not* reset timer and be ignored
+      dummyWrapper.prop('onDummyEvent')()
+
+      // manual event should've been called again
+      expect(onDummyEvent).toHaveBeenCalledTimes(2)
+
+      // fast forward past initial delay
+      jest.runTimersToTime(600)
+
+      // should fire composite event because there was no reset
+      expect(onCompositeEvent).toHaveBeenCalledTimes(1)
+    })
+
+    it('retriggers composite event with flag on when duration passes', () => {
+      const withCompositeEvent = compose({
+        eventPropName: 'onCompositeEvent',
+        triggerEvent: 'onDummyEvent',
+        defaultDuration: 1000,
+        shouldResetTimerOnRetrigger: true,
+      })
+      const EnhancedDummy = withCompositeEvent()(Dummy)
+
+      let onCompositeEvent = jest.fn()
+      let wrapper = shallow(
+        <EnhancedDummy onCompositeEvent={onCompositeEvent} />
+      )
+      let dummyWrapper = wrapper.find(Dummy)
+
+      // simulate dummy event
+      dummyWrapper.prop('onDummyEvent')()
+
+      // fast forward past duration
+      jest.runTimersToTime(1050)
+
+      // should fire composite event because duration expired
+      expect(onCompositeEvent).toHaveBeenCalledTimes(1)
+
+      // retrigger dummy event
+      // *should* reset timer since duration had expired
+      dummyWrapper.prop('onDummyEvent')()
+
+      // should not have fired again because we have to wait for duration
+      expect(onCompositeEvent).toHaveBeenCalledTimes(1)
+
+      // fast forward past delay again
+      jest.runTimersToTime(1050)
+
+      // should fire composite event because duration expired
+      expect(onCompositeEvent).toHaveBeenCalledTimes(2)
+
+      // retrigger dummy event one more time
+      // *should* reset timer since duration had expired
+      dummyWrapper.prop('onDummyEvent')()
+
+      // fast forward some time
+      jest.runTimersToTime(700)
+
+      // should not have been called again since not enough time has passed
+      expect(onCompositeEvent).toHaveBeenCalledTimes(2)
+
+      // retrigger dummy event one more time
+      // should reset timer
+      dummyWrapper.prop('onDummyEvent')()
+
+      // fast forward past what would've been time expiring
+      jest.runTimersToTime(400)
+
+      // still not called again since retrigger reset timer
+      expect(onCompositeEvent).toHaveBeenCalledTimes(2)
+
+      // fast forward past timer reset duration
+      jest.runTimersToTime(600)
+
+      // finally third fire happens
+      expect(onCompositeEvent).toHaveBeenCalledTimes(3)
+    })
+  })
 
   describe('`allowRefire` config', () => {})
 

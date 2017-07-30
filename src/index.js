@@ -18,7 +18,7 @@ export const compose = ({
   triggerEvent,
   defaultDuration = 0,
   cancelEvent,
-  // shouldResetTimerOnRetrigger = true,
+  shouldResetTimerOnRetrigger = true,
   // allowRefire = true,
   // beforeCallback,
 }) => {
@@ -86,16 +86,30 @@ export const compose = ({
           // If a specific handler was passed, call that one first
           this._callSpecificHandler(eventName, e)
 
+          // If no composite event handler was passed in, we can
+          // quit early
+          if (!onCompositeEvent) {
+            return
+          }
+
           // Call the composite event handler
-          if (onCompositeEvent) {
-            if (_isValidDuration(timeoutDuration)) {
+          if (_isValidDuration(timeoutDuration)) {
+            // If this is the first time the trigger event for the composite event
+            // has been called (i.e. no timeout) OR the shouldResetTimerOnRetrigger
+            // flag is on, we need to clear any existing timeout and start a fresh
+            // timer.
+            // In the case where the flag is off and we've got an active timer,
+            // we'll do nothing
+            if (!this._delayTimeout || shouldResetTimerOnRetrigger) {
+              clearTimeout(this._delayTimeout)
+
               this._delayTimeout = setTimeout(
                 () => onCompositeEvent(e),
                 timeoutDuration
               )
-            } else {
-              onCompositeEvent(e)
             }
+          } else {
+            onCompositeEvent(e)
           }
         }
 
