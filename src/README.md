@@ -7,7 +7,6 @@ compose({
   ?defaultDuration: number = 0,
   ?cancelEvent: string | string[],
   ?shouldResetTimerOnRetrigger: boolean = true,
-  ?allowRefire: boolean = true,
   ?beforeCallback: (handler: (?event: Event) => void, ?event: Event) => void
 }): HigherOrderComponent
 ```
@@ -24,7 +23,6 @@ compose({
 - [`defaultDuration`](#defaultduration)
 - [`cancelEvent`](#cancelevent)
 - [`shouldResetTimerOnRetrigger`](#shouldresettimeronretrigger)
-- [`allowRefire`](#allowrefire)
 - [`beforeCallback`](#beforecallback)
 
 ## `withMouseRest` Example
@@ -41,7 +39,6 @@ const withMouseRest = compose({
   defaultDuration: 150,
   cancelEvent: ['onMouseOut', 'onMouseDown'],
   shouldResetTimerOnRetrigger: true,
-  allowRefire: false,
 })
 
 // wrap div with `withMouseRest` HOC configured to fire event
@@ -108,7 +105,7 @@ export default MyComponent extends PureComponent {
 }
 ```
 
-If `defaultDuration` isn't specified, or has a value less than or equal to `0`, `null` or `undefined`, then time will not be a factor in the composite event. The [`cancelEvent`](#cancelevent), [`shouldResetTimerOnRetrigger`](#shouldresettimeronretrigger) & [`allowRefire`](#allowrefire) configurations no longer apply. However, you will most likely make use of the [`beforeCallback`](#beforecallback) configuration.
+If `defaultDuration` isn't specified, or has a value less than or equal to `0`, `null` or `undefined`, then time will not be a factor in the composite event. The [`cancelEvent`](#cancelevent) & [`shouldResetTimerOnRetrigger`](#shouldresettimeronretrigger) configurations no longer apply. However, you will most likely make use of the [`beforeCallback`](#beforecallback) configuration.
 
 Typically `defaultDuration` is omitted when the initial [`triggerEvent`](#triggerevent) is enough to formulate the composite event. An example is a DOM event that modifier key properties such that you can create an `onCtrlClick` composite event. In this case time is not a factor in the composite event.
 
@@ -173,17 +170,11 @@ For the [`withMouseRest` example](#withmouserest-example), if another `onMouseMo
 
 `shouldResetTimerOnRetrigger` is ignored if [`defaultDuration`](#defaultduration) is unspecified.
 
-## `allowRefire`
-
-**(Optional)** A `boolean` specifying whether or not the composite event should be allowed to be refired after it has already fired once and before a `cancelEvent` has been fired. If this optional configuration is not specified, then the value `true` will be used as the default.
-
-`allowRefire` is ignored if [`defaultDuration`](#defaultduration) is unspecified.
-
 ## `beforeCallback`
 
 **(Optional)** A `function` that is called before composite event prop handler is ultimately called. The function receives two parameters: [`handler()`](#handler) & [`event`](#event).
 
-The `beforeCallback` function is most useful when [`defaultDuration`](#defaultduration) is unspecified. In these cases you're wanting to build the composite event from additional information in the [`event`](#event), and not based on a timer. Within `beforeCallback` you will need to explicitly call the [`handler()`](#handler) in order for the composite event prop handler to be called.
+The `beforeCallback` function is most useful when [`defaultDuration`](#defaultduration) is unspecified. In these cases you're wanting to build the composite event from additional information in the [`event`](#event), and not based on a timer. Within `beforeCallback` you will need to explicitly call the [`handler()`](#handler) (with the [`event`](#event)) in order for the composite event prop handler to be called.
 
 ### `handler()`
 
@@ -191,4 +182,4 @@ A `function` that is the composite event prop handler. This is what React compon
 
 ### `event`
 
-**(Optional)** An event `object` for the `triggerEvent`. For composite events that aren't time-based, you can use the `event` object to help compose the composite event. Some components may not have event objects for the `triggerEvent`, in which case `event` will be `undefined`. On the web, DOM elements will pass a DOM event for `event`.
+**(Optional)** An event `object` for the `triggerEvent`. For composite events that aren't time-based, you can use the `event` object to help compose the composite event. Some components may not have event objects for the `triggerEvent`, in which case `event` will be `undefined`. On the web, DOM elements will pass a DOM event for `event`. More often than not, you will want to pass `event` when you call [`handler()`](#handler).

@@ -19,7 +19,6 @@ export const compose = ({
   defaultDuration = 0,
   cancelEvent,
   shouldResetTimerOnRetrigger = true,
-  // allowRefire = true,
   // beforeCallback,
 }) => {
   if (!eventPropName) {
@@ -80,6 +79,16 @@ export const compose = ({
           }
         }
 
+        _clearTimeout = () => {
+          this._delayTimeout = clearTimeout(this._delayTimeout)
+        }
+
+        _callCompositeEvent = (e) => {
+          let onCompositeEvent = this.props[compositeEventPropName]
+
+          onCompositeEvent(e)
+        }
+
         _handleTriggerEvent = (eventName, e) => {
           let onCompositeEvent = this.props[compositeEventPropName]
 
@@ -94,22 +103,21 @@ export const compose = ({
 
           // Call the composite event handler
           if (_isValidDuration(timeoutDuration)) {
-            // If this is the first time the trigger event for the composite event
-            // has been called (i.e. no timeout) OR the shouldResetTimerOnRetrigger
-            // flag is on, we need to clear any existing timeout and start a fresh
-            // timer.
-            // In the case where the flag is off and we've got an active timer,
-            // we'll do nothing
-            if (!this._delayTimeout || shouldResetTimerOnRetrigger) {
-              clearTimeout(this._delayTimeout)
+            // If shouldResetTimerOnRetrigger flag is not explicitly turned off, we need to
+            // clear any existing timeout and start a fresh timer because a retrigger happened.
+            if (shouldResetTimerOnRetrigger !== false) {
+              this._clearTimeout()
+            }
 
+            // And we can start a timeout as long as we don't have an active one going
+            if (!this._delayTimeout) {
               this._delayTimeout = setTimeout(
-                () => onCompositeEvent(e),
+                () => this._callCompositeEvent(e),
                 timeoutDuration
               )
             }
           } else {
-            onCompositeEvent(e)
+            this._callCompositeEvent(e)
           }
         }
 
@@ -118,7 +126,7 @@ export const compose = ({
           this._callSpecificHandler(eventName, e)
 
           // just cancel the timeout so composite handler won't be called
-          clearTimeout(this._delayTimeout)
+          this._clearTimeout()
         }
 
         render() {

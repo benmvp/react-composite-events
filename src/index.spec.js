@@ -11,7 +11,6 @@ const withMouseRest = compose({
   defaultDuration: 150,
   cancelEvent: ['onMouseOut', 'onMouseDown'],
   shouldResetTimerOnRetrigger: true,
-  allowRefire: false,
 })
 
 const EnhancedSampleAnchor = withMouseRest()('a')
@@ -1489,8 +1488,6 @@ describe('compose', () => {
       expect(onCompositeEvent).toHaveBeenCalledTimes(3)
     })
   })
-
-  describe('`allowRefire` config', () => {})
 
   describe('`beforeCallback` config', () => {})
 })
