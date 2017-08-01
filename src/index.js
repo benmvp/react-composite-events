@@ -19,7 +19,7 @@ export const compose = ({
   defaultDuration = 0,
   cancelEvent,
   shouldResetTimerOnRetrigger = true,
-  // beforeCallback,
+  beforeHandle = () => true,
 }) => {
   if (!eventPropName) {
     throw new Error('`eventPropName` configuration must be specified')
@@ -86,7 +86,14 @@ export const compose = ({
         _callCompositeEvent = (e) => {
           let onCompositeEvent = this.props[compositeEventPropName]
 
-          onCompositeEvent(e)
+          // If a before handle function is defined, call it and check to see what the function returns
+          // truthy - means that it wants the HOC to to call the final handler with the event object
+          // falsy - means that it doesn't want the HOC to do anything
+          // The function receives the composite event handler + event object to make it's decision and
+          // can call the handler directly
+          if (beforeHandle(onCompositeEvent, e)) {
+            onCompositeEvent(e)
+          }
         }
 
         _handleTriggerEvent = (eventName, e) => {

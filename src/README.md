@@ -7,7 +7,7 @@ compose({
   ?defaultDuration: number = 0,
   ?cancelEvent: string | string[],
   ?shouldResetTimerOnRetrigger: boolean = true,
-  ?beforeCallback: (handler: (?event: Event) => void, ?event: Event) => void
+  ?beforeHandle: (handler: (?event: Event) => void, ?event: Event) => boolean | void
 }): HigherOrderComponent
 ```
 
@@ -23,7 +23,7 @@ compose({
 - [`defaultDuration`](#defaultduration)
 - [`cancelEvent`](#cancelevent)
 - [`shouldResetTimerOnRetrigger`](#shouldresettimeronretrigger)
-- [`beforeCallback`](#beforecallback)
+- [`beforeHandle()`](#beforehandle)
 
 ## `withMouseRest` Example
 
@@ -105,7 +105,7 @@ export default MyComponent extends PureComponent {
 }
 ```
 
-If `defaultDuration` isn't specified, or has a value less than or equal to `0`, `null` or `undefined`, then time will not be a factor in the composite event. The [`cancelEvent`](#cancelevent) & [`shouldResetTimerOnRetrigger`](#shouldresettimeronretrigger) configurations no longer apply. However, you will most likely make use of the [`beforeCallback`](#beforecallback) configuration.
+If `defaultDuration` isn't specified, or has a value less than or equal to `0`, `null` or `undefined`, then time will not be a factor in the composite event. The [`cancelEvent`](#cancelevent) & [`shouldResetTimerOnRetrigger`](#shouldresettimeronretrigger) configurations no longer apply. However, you will most likely make use of the [`beforeHandle()`](#beforehandle) configuration.
 
 Typically `defaultDuration` is omitted when the initial [`triggerEvent`](#triggerevent) is enough to formulate the composite event. An example is a DOM event that modifier key properties such that you can create an `onCtrlClick` composite event. In this case time is not a factor in the composite event.
 
@@ -120,7 +120,7 @@ import {compose} from 'react-composite-events'
 const withCtrlClick = compose({
   eventPropName: 'onCtrlClick',
   triggerEvent: 'click',
-  beforeCallback: (handler, domEvent) => {
+  beforeHandle: (handler, domEvent) => {
     if (domEvent.ctrlKey) {
       // call event handler only if ctrl key
       // was also pressed
@@ -170,16 +170,19 @@ For the [`withMouseRest` example](#withmouserest-example), if another `onMouseMo
 
 `shouldResetTimerOnRetrigger` is ignored if [`defaultDuration`](#defaultduration) is unspecified.
 
-## `beforeCallback`
+## `beforeHandle()`
 
-**(Optional)** A `function` that is called before composite event prop handler is ultimately called. The function receives two parameters: [`handler()`](#handler) & [`event`](#event).
+**(Optional)** A `function` that is called before the composite event prop handler is ultimately called. The function receives two parameters: [`handler()`](#handler) & [`event`](#event).
 
-The `beforeCallback` function is most useful when [`defaultDuration`](#defaultduration) is unspecified. In these cases you're wanting to build the composite event from additional information in the [`event`](#event), and not based on a timer. Within `beforeCallback` you will need to explicitly call the [`handler()`](#handler) (with the [`event`](#event)) in order for the composite event prop handler to be called.
+The `beforeHandle()` function is most useful when [`defaultDuration`](#defaultduration) is unspecified. In these cases you're wanting to build the composite event from additional information in the [`event`](#event), and not based on a timer. Within `beforeHandle()`, you have options ways to call the composite event handler.
+
+1. Return `true`, signaling the properties of the [`event`](#event) are such that the composite event should be called. The actual handler will be called by the HOC with the `event` that was passed into `beforeHandle()`. This is the simplest and most common case. If `beforeHandle()` returns `false`, the composite event handler will not be called.
+2. Do not return anything (i.e. `undefined`), signaling that you will call the composite event handler directly by calling the [`handler()`](#handler) (with the [`event`](#event)). This option is useful if the logic to determine if the composite event handler should be called is asynchronous or you would like to pass a different, modified event object to the handler.
 
 ### `handler()`
 
-A `function` that is the composite event prop handler. This is what React component passed as the value for the composite event prop. Within [`beforeCallback`](#beforecallback) you will need to explicitly call the `handler()` in order for the composite event prop handler to be called.
+A `function` that is the composite event prop handler. This is what React component passed as the value for the composite event prop. Within [`beforeHandle()`](#beforehandle) you will need to explicitly call the `handler()` if you choose not to return a boolean value in order for the composite event prop handler to be called.
 
 ### `event`
 
-**(Optional)** An event `object` for the `triggerEvent`. For composite events that aren't time-based, you can use the `event` object to help compose the composite event. Some components may not have event objects for the `triggerEvent`, in which case `event` will be `undefined`. On the web, DOM elements will pass a DOM event for `event`. More often than not, you will want to pass `event` when you call [`handler()`](#handler).
+**(Optional)** An event `object` for the `triggerEvent`. For composite events that aren't time-based, you can use the `event` object to help compose the composite event. Some components may not have event objects for the `triggerEvent`, in which case `event` will be `undefined`. On the web, DOM elements will pass a DOM event for `event`. More often than not, you will want to pass `event` if you call [`handler()`](#handler). If you return a boolean within [`beforeHandle()`](#beforehandle), the `event` object is automatically passed.

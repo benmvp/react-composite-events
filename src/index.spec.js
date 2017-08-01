@@ -1489,5 +1489,134 @@ describe('compose', () => {
     })
   })
 
-  describe('`beforeCallback` config', () => {})
+  describe('`beforeHandle` config', () => {
+    it('calls the function w/ handler & event object when `defaultDuration` is not specified', () => {
+      let beforeHandle = jest.fn()
+      const withCompositeEvent = compose({
+        eventPropName: 'onCompositeEvent',
+        triggerEvent: 'onDummyEvent',
+        beforeHandle,
+      })
+      const EnhancedDummy = withCompositeEvent()(Dummy)
+
+      let onCompositeEvent = jest.fn()
+      let wrapper = shallow(
+        <EnhancedDummy onCompositeEvent={onCompositeEvent} />
+      )
+      let dummyWrapper = wrapper.find(Dummy)
+      let fakeEventObject = {}
+
+      expect(beforeHandle).toHaveBeenCalledTimes(0)
+
+      // simulate dummy event
+      dummyWrapper.prop('onDummyEvent')(fakeEventObject)
+
+      expect(beforeHandle).toHaveBeenCalledTimes(1)
+      expect(beforeHandle).toHaveBeenCalledWith(
+        onCompositeEvent,
+        fakeEventObject
+      )
+    })
+
+    it('calls the function when `defaultDuration` is specified', () => {
+      let beforeHandle = jest.fn()
+      const withCompositeEvent = compose({
+        eventPropName: 'onCompositeEvent',
+        triggerEvent: 'onDummyEvent',
+        defaultDuration: 800,
+        beforeHandle,
+      })
+      const EnhancedDummy = withCompositeEvent()(Dummy)
+
+      let onCompositeEvent = jest.fn()
+      let wrapper = shallow(
+        <EnhancedDummy onCompositeEvent={onCompositeEvent} />
+      )
+      let dummyWrapper = wrapper.find(Dummy)
+      let fakeEventObject = {}
+
+      expect(beforeHandle).toHaveBeenCalledTimes(0)
+
+      // simulate dummy event
+      dummyWrapper.prop('onDummyEvent')(fakeEventObject)
+
+      // still shouldn't be called because no time has passed
+      expect(beforeHandle).toHaveBeenCalledTimes(0)
+
+      jest.runTimersToTime(400)
+
+      // still shouldn't be called because delay hasn't fully passed
+      expect(beforeHandle).toHaveBeenCalledTimes(0)
+
+      jest.runTimersToTime(500)
+
+      // should've been called by now
+      expect(beforeHandle).toHaveBeenCalledTimes(1)
+      expect(beforeHandle).toHaveBeenCalledWith(
+        onCompositeEvent,
+        fakeEventObject
+      )
+    })
+
+    it('calls handler with trigger event object when function returns `true`', () => {
+      const withCompositeEvent = compose({
+        eventPropName: 'onCompositeEvent',
+        triggerEvent: ['onKeyDown', 'onKeyUp'],
+        beforeHandle: () => true,
+      })
+      const EnhancedNav = withCompositeEvent()('nav')
+
+      let onCompositeEvent = jest.fn()
+      let wrapper = shallow(<EnhancedNav onCompositeEvent={onCompositeEvent} />)
+      let navWrapper = wrapper.find('nav')
+      let fakeEventObject = {}
+
+      // simulate trigger event
+      navWrapper.simulate('keydown', fakeEventObject)
+
+      expect(onCompositeEvent).toHaveBeenCalledTimes(1)
+      expect(onCompositeEvent).toHaveBeenCalledWith(fakeEventObject)
+    })
+
+    it('does not call handler when function returns `false`', () => {
+      const withCompositeEvent = compose({
+        eventPropName: 'onCompositeEvent',
+        triggerEvent: ['onKeyDown', 'onKeyUp'],
+        beforeHandle: () => false,
+      })
+      const EnhancedNav = withCompositeEvent()('nav')
+
+      let onCompositeEvent = jest.fn()
+      let wrapper = shallow(<EnhancedNav onCompositeEvent={onCompositeEvent} />)
+      let navWrapper = wrapper.find('nav')
+      let fakeEventObject = {}
+
+      // simulate trigger event
+      navWrapper.simulate('keyup', fakeEventObject)
+
+      expect(onCompositeEvent).toHaveBeenCalledTimes(0)
+    })
+
+    it('calls the handler only once when function returns `undefined` and calls handler explicitly', () => {
+      const withCompositeEvent = compose({
+        eventPropName: 'onCompositeEvent',
+        triggerEvent: ['onKeyDown', 'onKeyUp'],
+        beforeHandle: (handler, event) => {
+          handler(event)
+        },
+      })
+      const EnhancedNav = withCompositeEvent()('nav')
+
+      let onCompositeEvent = jest.fn()
+      let wrapper = shallow(<EnhancedNav onCompositeEvent={onCompositeEvent} />)
+      let navWrapper = wrapper.find('nav')
+      let fakeEventObject = {}
+
+      // simulate trigger event
+      navWrapper.simulate('keydown', fakeEventObject)
+
+      expect(onCompositeEvent).toHaveBeenCalledTimes(1)
+      expect(onCompositeEvent).toHaveBeenCalledWith(fakeEventObject)
+    })
+  })
 })
