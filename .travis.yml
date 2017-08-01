@@ -1,8 +1,11 @@
 language: node_js
 node_js:
-  # - "node"
-  # - "7"
+  - "node"
+  - "8"
+  - "7"
   - "6"
+  - "5"
+  - "4"
 
 # Cache dependencies in $HOME/.yarn-cache across builds
 cache: yarn

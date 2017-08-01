@@ -21,10 +21,7 @@
     "validate": "npm run lint && npm test"
   },
   "lint-staged": {
-    "*.js": [
-      "npm run format",
-      "git add"
-    ]
+    "*.js": ["npm run format", "git add"]
   },
   "babel": {
     "presets": [
@@ -32,28 +29,31 @@
         "env",
         {
           "targets": {
-            "node": "4.5"
+            "node": "4",
+            "browsers": ["last 2 versions"]
           }
         }
       ],
+      "stage-3",
       "react"
-    ]
+    ],
+    "plugins": ["transform-class-properties"]
   },
   "eslintConfig": {
     "extends": "eventbrite-react",
     "rules": {
-      "indent": [
-        "error",
-        2
-      ],
-      "semi": [
-        "error",
-        "never"
-      ]
+      "indent": ["error", 2],
+      "no-invalid-this": "off",
+      "semi": ["error", "never"],
+      "react/jsx-indent": ["error", 2],
+      "react/jsx-indent-props": ["error", 2]
     },
     "env": {
       "jest": true
     }
+  },
+  "jest": {
+    "setupTestFrameworkScriptFile": "./node_modules/jest-enzyme/lib/index.js"
   },
   "peerDependencies": {
     "react": ">=15"
@@ -62,8 +62,10 @@
     "babel-cli": "^6.24.1",
     "babel-eslint": "^7.0.0",
     "babel-jest": "^20.0.3",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-env": "^1.6.0",
     "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-3": "^6.24.1",
     "enzyme": "^2.9.1",
     "eslint": "^3.0.0",
     "eslint-config-eventbrite-react": "^5.0.0",
@@ -72,11 +74,16 @@
     "eslint-plugin-react": "^6.0.0",
     "husky": "^0.14.3",
     "jest": "^20.0.4",
+    "jest-enzyme": "^3.6.1",
     "lint-staged": "^4.0.1",
     "prettier-eslint-cli": "^4.1.1",
-    "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-test-renderer": "^15.6.1"
+  },
+  "dependencies": {
+    "array-to-lookup": "^1.0.1",
+    "lodash.omit": "^4.5.0",
+    "prop-types": "^15.5.10"
   }
 }

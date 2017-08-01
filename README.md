@@ -18,9 +18,9 @@
 
 A collection of higher-order components (HOCs) to easily create composite events in React components.
 
-> `react-composite-events` is currently under initial API design and not available for public use! Check out the [API Docs](#api-docs) for more info.
+> `react-composite-events` is currently under alpha development and not available for general public use! Check out the [API Docs](#api-docs) for more info.
 
-`react-composite-events` is heavily inspired by the [`Uize.Dom.VirtualEvent`](https://github.com/UIZE/UIZE-JavaScript-Framework/blob/master/site-source/js/Uize/Dom/VirtualEvent.js) module that is a part of the open-source [UIZE JavaScript Framework](https://github.com/UIZE/UIZE-JavaScript-Framework). It is stable, [dependency-free](https://david-dm.org/benmvp/react-composite-events#info=dependencies), [heavily-tested](https://coveralls.io/github/benmvp/react-composite-events?branch=master) and [well-documented](#api-docs).
+`react-composite-events` is [stable](https://travis-ci.org/benmvp/react-composite-events), [heavily-tested](https://coveralls.io/github/benmvp/react-composite-events?branch=master) and [well-documented](#api-docs).
 
 ## ToC
 
@@ -29,6 +29,8 @@ A collection of higher-order components (HOCs) to easily create composite events
 - [What is a Composite Event?](#what-is-a-composite-event)
 - [Benefits of Composite Events](#benefits-of-composite-events)
 - [API Docs](#api-docs)
+- [Target Environments](#target-environments)
+- [Prior Art](#prior-art)
 - [Contributing](CONTRIBUTING.md)
 - [Project philosophy](#project-philosophy)
 - [License](LICENSE)
@@ -118,6 +120,14 @@ The Composite Event HOCs are grouped by domain:
 - [**Generic**](src/generic/) - geneirc HOCs that create composite events intended to be environment-agnostic
 - [**Mouse**](src/mouse/) - the HOCs that create composite events around DOM mouse events
 - [**Key**](src/key/) - the HOCs that create composite events around DOM keyboard events
+
+## Target Environments
+
+TBD...
+
+## Prior Art
+
+`react-composite-events` is heavily inspired by the [`Uize.Dom.VirtualEvent`](https://github.com/UIZE/UIZE-JavaScript-Framework/blob/master/site-source/js/Uize/Dom/VirtualEvent.js) module that is a part of the open-source [UIZE JavaScript Framework](https://github.com/UIZE/UIZE-JavaScript-Framework). 
 
 ## Contributing
 
