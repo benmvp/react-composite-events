@@ -1,7 +1,12 @@
 import React, {PureComponent} from 'react'
-import PropTypes from 'prop-types'
-import toLookup from 'array-to-lookup'
-import omit from 'lodash.omit'
+
+const _omit = (props, propToOmit) => {
+  let propsCopy = {...props}
+
+  delete propsCopy[propToOmit]
+
+  return propsCopy
+}
 
 const _eventNamesToHandlerLookup = (eventNames, handler) =>
   (eventNames || []).reduce(
@@ -21,11 +26,13 @@ export const compose = ({
   shouldResetTimerOnRetrigger = true,
   beforeHandle = () => true,
 }) => {
-  if (!eventPropName) {
-    throw new Error('`eventPropName` configuration must be specified')
-  }
-  if (!triggerEvent) {
-    throw new Error('`triggerEvent` configuration must be specified')
+  if (process.env.NODE_ENV !== 'production') {
+    if (!eventPropName) {
+      throw new Error('`eventPropName` configuration must be specified')
+    }
+    if (!triggerEvent) {
+      throw new Error('`triggerEvent` configuration must be specified')
+    }
   }
 
   let triggerEvents = Array.isArray(triggerEvent)
@@ -49,7 +56,7 @@ export const compose = ({
     let compositeEventPropName = `${eventPropName}${durationSuffix}`
 
     return (Component) => {
-      if (!Component) {
+      if (process.env.NODE_ENV !== 'production' && !Component) {
         throw new Error('Component to enhance must be specified')
       }
 
@@ -58,16 +65,6 @@ export const compose = ({
 
       return class extends PureComponent {
         static displayName = `${componentDisplayName}-${eventPropName}${durationSuffix}`
-
-        // Defining the known prop types that *could* be passed
-        // * the composite event (most likely)
-        // * an event matching the trigger events
-        // * an event matching the cancel events
-        static propTypes = {
-          ...toLookup(triggerEvents, PropTypes.func),
-          ...toLookup(cancelEvents, PropTypes.func),
-          [compositeEventPropName]: PropTypes.func,
-        }
 
         _delayTimeout = null
 
@@ -140,7 +137,7 @@ export const compose = ({
           // Want to pass all the props through to the underlying Component except the passed
           // compositeEventPropName, which we need to handle specially.
           // This will also include separate specific handlers matching trigger & cancel events
-          let passThruProps = omit(this.props, [compositeEventPropName])
+          let passThruProps = _omit(this.props, compositeEventPropName)
 
           // Create an object mapping of the trigger/cancel events to handlers.
           // The handler needs to bind the event name so that we can check to see if

@@ -20,7 +20,7 @@ A collection of higher-order components (HOCs) to easily create composite events
 
 > `react-composite-events` is currently under alpha development and not available for general public use! Check out the [API Docs](#api-docs) for more info.
 
-`react-composite-events` is [stable](https://travis-ci.org/benmvp/react-composite-events), [heavily-tested](https://coveralls.io/github/benmvp/react-composite-events?branch=master) and [well-documented](#api-docs).
+`react-composite-events` is [stable](https://travis-ci.org/benmvp/react-composite-events), [dependency-free](https://david-dm.org/benmvp/react-composite-events#info=dependencies), [heavily-tested](https://coveralls.io/github/benmvp/react-composite-events?branch=master) and [well-documented](#api-docs).
 
 ## ToC
 

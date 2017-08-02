@@ -4,6 +4,19 @@
   "description": "A collection of higher-order components (HOCs) to easily create composite events in React components",
   "author": "Ben Ilegbodu <ben@benmvp.com>",
   "main": "dist/react-composite-events.cjs.js",
+  "module": "dist/react-composite-events.es.js",
+  "jsnext:main": "dist/react-composite-events.es.js",
+  "browser": "dist/react-composite-events.umd.js",
+  "keywords": [
+    "react",
+    "react-native",
+    "dom",
+    "higher-order",
+    "components",
+    "composite",
+    "events",
+    "composition"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/benmvp/react-composite-events.git"
@@ -14,6 +27,7 @@
   "homepage": "https://github.com/benmvp/react-composite-events#readme",
   "license": "MIT",
   "scripts": {
+    "build": "rm -rf dist && rollup --config",
     "format": "prettier-eslint --write 'src/**/*.js'",
     "lint": "eslint src",
     "precommit": "lint-staged && npm run validate",
@@ -29,8 +43,7 @@
         "env",
         {
           "targets": {
-            "node": "4",
-            "browsers": ["last 2 versions"]
+            "node": true
           }
         }
       ],
@@ -62,6 +75,7 @@
     "babel-cli": "^6.24.1",
     "babel-eslint": "^7.0.0",
     "babel-jest": "^20.0.3",
+    "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-env": "^1.6.0",
     "babel-preset-react": "^6.24.1",
@@ -79,11 +93,11 @@
     "prettier-eslint-cli": "^4.1.1",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
-    "react-test-renderer": "^15.6.1"
+    "react-test-renderer": "^15.6.1",
+    "rollup": "^0.45.2",
+    "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-commonjs": "^8.0.2",
+    "rollup-plugin-node-resolve": "^3.0.0"
   },
-  "dependencies": {
-    "array-to-lookup": "^1.0.1",
-    "lodash.omit": "^4.5.0",
-    "prop-types": "^15.5.10"
-  }
+  "dependencies": {}
 }
