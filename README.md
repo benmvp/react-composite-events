@@ -55,7 +55,7 @@ You use composite events by wrapping a component in a higher-order component (HO
 
 ```js
 // import `withMouseRest` HOC
-import {withMouseRest} from 'react-composite-events/mouse'
+import {withMouseRest} from 'react-composite-events'
 
 // wrap div with `withMouseRest` HOC configured to fire event
 // after 150 milliseconds. This will make a `onMouseRest-150`
@@ -80,13 +80,13 @@ export default MyComponent extends PureComponent {
 
 Imagine a navigation menu that displays on hover. You don't want the menu activated just when the user passes over the menu. You want it to activate when they've rested on the menu for a "short while" to indicate their interest. `onMouseOver` will trigger even if the mouse is just passing over an element, whereas the `onMouseRest` composite event will trigger only after the user has lingered for a bit. The "mouse rest" composite event is a better solution than a simple `onMouseOver`.
 
-Check out the docs for [`withMouseRest()`](src/mouse/#withmouserest) or the rest of the [API Docs](#api-docs).
+Check out the docs for [`withMouseRest()`](src/mouse.md/#withmouserest) or the rest of the [API Docs](#api-docs).
 
 ## What is a Composite Event?
 
 A "composite event" is an event for a component that is not part of its standard set of events, but is implemented in supplemental JavaScript code. It can be an event happening over time. In the case of DOM events, it can be a filter of existing DOM events.
 
-Composite events were originally considered only in the context of DOM events. But with React Native and the proliferation of other non-DOM React environments, there are some composite events that do not assume a DOM environment (particularly the [generic composite events](generic/)).
+Composite events were originally considered only in the context of DOM events. But with React Native and the proliferation of other non-DOM React environments, there are some composite events that do not assume a DOM environment (particularly the [generic composite events](src/generic.md)).
 
 A rather compelling and highly practical example is the "remain-in-state" DOM-related composite events. These allow handlers to be executed when a node remains in a specific event state for a specified amount of time (i.e. the user rests the mouse over a node for more than half a second).
 
@@ -116,10 +116,10 @@ This may sound a little abstract, but what this means is that you can tune the b
 
 The Composite Event HOCs are grouped by domain:
 
-- [**Base**](src/) - (advanced) the base HOC composer from which all other HOCs are built
-- [**Generic**](src/generic/) - geneirc HOCs that create composite events intended to be environment-agnostic
-- [**Mouse**](src/mouse/) - the HOCs that create composite events around DOM mouse events
-- [**Key**](src/key/) - the HOCs that create composite events around DOM keyboard events
+- [**Base**](src/compose.md) - (advanced) the base HOC composer from which all other HOCs are built
+- [**Generic**](src/generic.md) - geneirc HOCs that create composite events intended to be environment-agnostic
+- [**Mouse**](src/mouse.md) - the HOCs that create composite events around DOM mouse events
+- [**Key**](src/key.md) - the HOCs that create composite events around DOM keyboard events
 
 ## Target Environments
 

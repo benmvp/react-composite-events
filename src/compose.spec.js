@@ -1,7 +1,7 @@
 /* eslint-disable no-empty-function */
 import React from 'react'
 import {shallow, mount} from 'enzyme'
-import {compose} from './'
+import compose from './compose'
 
 const Dummy = () => <div />
 

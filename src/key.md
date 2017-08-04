@@ -23,6 +23,8 @@ withKeyRemainDown
 Creates an HOC for a composite event (named `onKeyRemainDown-*`) that is triggered when the user presses down on a key on the keyboard for a focused component that supports key events, and then continues to hold down that key for a specified duration of time.
 
 ```js
+import {withKeyRemainDown} from 'react-composite-events'
+// or
 import {withKeyRemainDown} from 'react-composite-events/key'
 
 const EnhancedTextarea = withKeyRemainDown(200)('textarea')
@@ -43,6 +45,8 @@ export default MyComponent extends PureComponent {
 When no `duration` parameter is specified, then the value for this parameter is defaulted to `500` (500 milliseconds). In this case the composite event prop is simply `onKeyRemainDown`.
 
 ```js
+import {withKeyRemainDown} from 'react-composite-events'
+// or
 import {withKeyRemainDown} from 'react-composite-events/key'
 
 const EnhancedTextarea = withKeyRemainDown()('textarea')
@@ -76,6 +80,8 @@ withKeyRemainUp
 Creates an HOC for a composite event (named `onKeyRemainUp-*`) that is triggered when the user release a key on the keyboard for a focused component that supports key events, and doesn't press down on a key again for a specified duration of time.
 
 ```js
+import {withKeyRemainUp} from 'react-composite-events'
+// or
 import {withKeyRemainUp} from 'react-composite-events/key'
 
 const EnhancedTextarea = withKeyRemainUp(200)('textarea')
@@ -96,6 +102,8 @@ export default MyComponent extends PureComponent {
 When no `duration` parameter is specified, then the value for this parameter is defaulted to `500` (500 milliseconds). In this case the composite event prop is simply `onKeyRemainUp`.
 
 ```js
+import {withKeyRemainUp} from 'react-composite-events'
+// or
 import {withKeyRemainUp} from 'react-composite-events/key'
 
 const EnhancedTextarea = withKeyRemainUp()('textarea')
