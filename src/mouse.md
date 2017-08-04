@@ -37,6 +37,8 @@ withMouseRest
 Creates an HOC for a composite event (named `onMouseRest-*`) that is triggered when the user has rested the mouse over a component (and doesn't mouse out of that component or mouse down on it) for a specified duration of time.
 
 ```js
+import {withMouseRest} from 'react-composite-events'
+// or
 import {withMouseRest} from 'react-composite-events/mouse'
 
 const EnhancedDiv = withMouseRest(100)('div')
@@ -57,6 +59,8 @@ export default MyComponent extends PureComponent {
 When no `duration` parameter is specified, then the value for this parameter is defaulted to `500` (500 milliseconds). In this case the composite event prop is simply `onMouseRest`.
 
 ```js
+import {withMouseRest} from 'react-composite-events'
+// or
 import {withMouseRest} from 'react-composite-events/mouse'
 
 const EnhancedDiv = withMouseRest()('div')
@@ -91,6 +95,8 @@ withMouseRemainOver
 Creates an HOC for a composite event (named `onMouseRemainOver-*`) that is triggered when the user mouses over a component and doesn't mouse out of that component or mouse down on it for a specified duration of time. The user can continue to move the mouse over the component to trigger `onMouseRemainOver`.
 
 ```js
+import {withMouseRemainOver} from 'react-composite-events'
+// or
 import {withMouseRemainOver} from 'react-composite-events/mouse'
 
 const EnhancedDiv = withMouseRemainOver(450)('div')
@@ -111,6 +117,8 @@ export default MyComponent extends PureComponent {
 When no `duration` parameter is specified, then the value for this parameter is defaulted to `500` (500 milliseconds). In this case the composite event prop is simply `onMouseRemainOver`.
 
 ```js
+import {withMouseRemainOver} from 'react-composite-events'
+// or
 import {withMouseRemainOver} from 'react-composite-events/mouse'
 
 const EnhancedDiv = withMouseRemainOver()('div')
@@ -145,6 +153,8 @@ withMouseRemainOut
 Creates an HOC for a composite event (named `onMouseRemainOut-*`) that is triggered when the user mouses out of a component and doesn't mouse over that component again for a specified duration of time.
 
 ```js
+import {withMouseRemainOut} from 'react-composite-events'
+// or
 import {withMouseRemainOut} from 'react-composite-events/mouse'
 
 const EnhancedDiv = withMouseRemainOut(333)('div')
@@ -165,6 +175,8 @@ export default MyComponent extends PureComponent {
 When no `duration` parameter is specified, then the value for this parameter is defaulted to `500` (500 milliseconds). In this case the composite event prop is simply `onMouseRemainOut`.
 
 ```js
+import {withMouseRemainOut} from 'react-composite-events'
+// or
 import {withMouseRemainOut} from 'react-composite-events/mouse'
 
 const EnhancedDiv = withMouseRemainOut()('div')
@@ -197,6 +209,8 @@ withMouseEnterLeft(): HigherOrderComponent
 Creates an HOC for a composite event (named `onMouseEnterLeft`) that is triggered when the user mouses over a DOM element (or component that passes a DOM element) at the left edge.
 
 ```js
+import {withMouseEnterLeft} from 'react-composite-events'
+// or
 import {withMouseEnterLeft} from 'react-composite-events/mouse'
 
 const EnhancedDiv = withMouseEnterLeft()('div')
@@ -229,6 +243,8 @@ withMouseEnterRight(): HigherOrderComponent
 Creates an HOC for a composite event (named `onMouseEnterRight`) that is triggered when the user mouses over a DOM element (or component that passes a DOM element) at the right edge.
 
 ```js
+import {withMouseEnterRight} from 'react-composite-events'
+// or
 import {withMouseEnterRight} from 'react-composite-events/mouse'
 
 const EnhancedDiv = withMouseEnterRight()('div')
@@ -261,6 +277,8 @@ withMouseEnterTop(): HigherOrderComponent
 Creates an HOC for a composite event (named `onMouseEnterTop`) that is triggered when the user mouses over a DOM element (or component that passes a DOM element) at the top edge.
 
 ```js
+import {withMouseEnterTop} from 'react-composite-events'
+// or
 import {withMouseEnterTop} from 'react-composite-events/mouse'
 
 const EnhancedDiv = withMouseEnterTop()('div')
@@ -293,6 +311,8 @@ withMouseEnterBottom(): HigherOrderComponent
 Creates an HOC for a composite event (named `onMouseEnterBottom`) that is triggered when the user mouses over a DOM element (or component that passes a DOM element) at the bottom edge.
 
 ```js
+import {withMouseEnterBottom} from 'react-composite-events'
+// or
 import {withMouseEnterBottom} from 'react-composite-events/mouse'
 
 const EnhancedDiv = withMouseEnterBottom()('div')
@@ -324,6 +344,8 @@ withMouseLeaveLeft(): HigherOrderComponent
 Creates an HOC for a composite event (named `onMouseLeaveLeft`) that is triggered when the user mouses out of a DOM element (or component that passes a DOM element) at the left edge.
 
 ```js
+import {withMouseLeaveLeft} from 'react-composite-events'
+// or
 import {withMouseLeaveLeft} from 'react-composite-events/mouse'
 
 const EnhancedDiv = withMouseLeaveLeft()('div')
@@ -356,6 +378,8 @@ withMouseLeaveRight(): HigherOrderComponent
 Creates an HOC for a composite event (named `onMouseLeaveRight`) that is triggered when the user mouses out of a DOM element (or component that passes a DOM element) at the right edge.
 
 ```js
+import {withMouseLeaveRight} from 'react-composite-events'
+// or
 import {withMouseLeaveRight} from 'react-composite-events/mouse'
 
 const EnhancedDiv = withMouseLeaveRight()('div')
@@ -388,6 +412,8 @@ withMouseLeaveTop(): HigherOrderComponent
 Creates an HOC for a composite event (named `onMouseLeaveTop`) that is triggered when the user mouses out of a DOM element (or component that passes a DOM element) at the top edge.
 
 ```js
+import {withMouseLeaveTop} from 'react-composite-events'
+// or
 import {withMouseLeaveTop} from 'react-composite-events/mouse'
 
 const EnhancedDiv = withMouseLeaveTop()('div')
@@ -420,6 +446,8 @@ withMouseLeaveBottom(): HigherOrderComponent
 Creates an HOC for a composite event (named `onMouseLeaveBottom`) that is triggered when the user mouses out of a DOM element (or component that passes a DOM element) at the bottom edge.
 
 ```js
+import {withMouseLeaveBottom} from 'react-composite-events'
+// or
 import {withMouseLeaveBottom} from 'react-composite-events/mouse'
 
 const EnhancedDiv = withMouseLeaveBottom()('div')
@@ -452,6 +480,8 @@ withOnlyClick(): HigherOrderComponent
 Creates an HOC for a composite event (named `onOnlyClick`) that is triggered when the user clicks a DOM element (or component that passes a DOM element) with *no* modifier keys pressed.
 
 ```js
+import {withOnlyClick} from 'react-composite-events'
+// or
 import {withOnlyClick} from 'react-composite-events/mouse'
 
 const EnhancedDiv = withOnlyClick()('div')
@@ -484,6 +514,8 @@ withAltClick(): HigherOrderComponent
 Creates an HOC for a composite event (named `onAltClick`) that is triggered when the user clicks a DOM element (or component that passes a DOM element) with *only* the `Alt` modifier key pressed.
 
 ```js
+import {withAltClick} from 'react-composite-events'
+// or
 import {withAltClick} from 'react-composite-events/mouse'
 
 const EnhancedDiv = withAltClick()('div')
@@ -516,6 +548,8 @@ withCtrlClick(): HigherOrderComponent
 Creates an HOC for a composite event (named `onCtrlClick`) that is triggered when the user clicks a DOM element (or component that passes a DOM element) with *only* the `Ctrl` modifier key pressed.
 
 ```js
+import {withCtrlClick} from 'react-composite-events'
+// or
 import {withCtrlClick} from 'react-composite-events/mouse'
 
 const EnhancedDiv = withCtrlClick()('div')
@@ -548,6 +582,8 @@ withMetaClick(): HigherOrderComponent
 Creates an HOC for a composite event (named `onMetaClick`) that is triggered when the user clicks a DOM element (or component that passes a DOM element) with *only* the `Meta` modifier key (Mac `Cmd` modifier key) pressed.
 
 ```js
+import {withMetaClick} from 'react-composite-events'
+// or
 import {withMetaClick} from 'react-composite-events/mouse'
 
 const EnhancedDiv = withMetaClick()('div')
@@ -580,6 +616,8 @@ withShiftClick(): HigherOrderComponent
 Creates an HOC for a composite event (named `onShiftClick`) that is triggered when the user clicks a DOM element (or component that passes a DOM element) with *only* the `Shift` modifier key pressed.
 
 ```js
+import {withShiftClick} from 'react-composite-events'
+// or
 import {withShiftClick} from 'react-composite-events/mouse'
 
 const EnhancedDiv = withShiftClick()('div')
@@ -625,6 +663,8 @@ composeMouseModifierKey({
 #### `composeMouseModifierKey()` Example
 
 ```js
+import {composeMouseModifierKey} from 'react-composite-events'
+// or
 import {composeMouseModifierKey} from 'react-composite-events/mouse'
 
 const withShiftMetaMouseEnter = composeMouseModifierKey({
@@ -697,7 +737,7 @@ import {
   withCtrlClick, 
   withMetaClick, 
   withAltClick
-} from 'react-composite-events/mouse'
+} from 'react-composite-events'
 
 const enhance = _compose(
   withOnlyClick(),

@@ -3,7 +3,20 @@
   "version": "0.0.1",
   "description": "A collection of higher-order components (HOCs) to easily create composite events in React components",
   "author": "Ben Ilegbodu <ben@benmvp.com>",
-  "main": "dist/react-composite-events.cjs.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/es/index.js",
+  "jsnext:main": "dist/es/index.js",
+  "browser": "dist/umd/index.js",
+  "keywords": [
+    "react",
+    "react-native",
+    "dom",
+    "higher-order",
+    "components",
+    "composite",
+    "events",
+    "composition"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/benmvp/react-composite-events.git"
@@ -14,6 +27,7 @@
   "homepage": "https://github.com/benmvp/react-composite-events#readme",
   "license": "MIT",
   "scripts": {
+    "build": "gulp",
     "format": "prettier-eslint --write 'src/**/*.js'",
     "lint": "eslint src",
     "precommit": "lint-staged && npm run validate",
@@ -29,8 +43,7 @@
         "env",
         {
           "targets": {
-            "node": "4",
-            "browsers": ["last 2 versions"]
+            "node": true
           }
         }
       ],
@@ -62,16 +75,27 @@
     "babel-cli": "^6.24.1",
     "babel-eslint": "^7.0.0",
     "babel-jest": "^20.0.3",
+    "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-es2015-modules-umd": "^6.24.1",
     "babel-preset-env": "^1.6.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-3": "^6.24.1",
+    "del": "^3.0.0",
     "enzyme": "^2.9.1",
     "eslint": "^3.0.0",
     "eslint-config-eventbrite-react": "^5.0.0",
     "eslint-plugin-import": "^2.0.0",
     "eslint-plugin-jsx-a11y": "^6.0.0",
     "eslint-plugin-react": "^6.0.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-debug": "^3.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.6.1",
+    "gulp-sourcemaps": "^2.6.0",
+    "gulp-uglify": "^3.0.0",
+    "gulp-util": "^3.0.8",
     "husky": "^0.14.3",
     "jest": "^20.0.4",
     "jest-enzyme": "^3.6.1",
@@ -81,9 +105,5 @@
     "react-dom": "^15.6.1",
     "react-test-renderer": "^15.6.1"
   },
-  "dependencies": {
-    "array-to-lookup": "^1.0.1",
-    "lodash.omit": "^4.5.0",
-    "prop-types": "^15.5.10"
-  }
+  "dependencies": {}
 }

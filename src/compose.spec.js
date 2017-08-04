@@ -1,7 +1,7 @@
 /* eslint-disable no-empty-function */
 import React from 'react'
 import {shallow, mount} from 'enzyme'
-import {compose} from './'
+import compose from './compose'
 
 const Dummy = () => <div />
 
@@ -68,6 +68,22 @@ describe('compose', () => {
 
       // throws an error because no Component was specified
       expect(() => withCompositeEvent()()).toThrow()
+    })
+
+    it('does not pass composite event to underlying component', () => {
+      const withCompositeEvent = compose({
+        eventPropName: 'onCompositeEvent',
+        triggerEvent: 'onDummyEvent',
+      })
+      const EnhancedDummy = withCompositeEvent()(Dummy)
+
+      let onCompositeEvent = jest.fn()
+      let wrapper = shallow(
+        <EnhancedDummy onCompositeEvent={onCompositeEvent} />
+      )
+      let dummyWrapper = wrapper.find(Dummy)
+
+      expect(dummyWrapper).not.toHaveProp('onCompositeEvent')
     })
   })
 
