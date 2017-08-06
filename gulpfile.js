@@ -10,7 +10,7 @@ const debug = require('gulp-debug')
 const util = require('gulp-util')
 const del = require('del')
 
-const FORMAT_ES = 'es'
+const FORMAT_ESM = 'esm'
 const FORMAT_CJS = 'cjs'
 const FORMAT_UMD = 'umd'
 
@@ -24,7 +24,7 @@ const FILES_TO_BUILD = [
 
 // When transpiling to ES format, we still use the `env` preset
 // and we want everything transpiled EXCEPT modules
-const ES_ENV_PRESET = ['env', {modules: false}]
+const ESM_ENV_PRESET = ['env', {modules: false}]
 
 // When transpiling to UMD, we need the UMD transform plugin.
 // Need to explicitly list the globals unfortunately
@@ -59,7 +59,7 @@ const _getBabelStream = (format) =>
         babelrc: false,
 
         presets: [
-          format === FORMAT_ES ? ES_ENV_PRESET : 'env',
+          format === FORMAT_ESM ? ESM_ENV_PRESET : 'env',
           'stage-3',
           'react',
         ],
@@ -71,25 +71,25 @@ const _getBabelStream = (format) =>
       })
     )
 
-gulp.task('build:clean:cjs', () => del(['dist/cjs']))
-gulp.task('build:clean:es', () => del(['dist/es']))
-gulp.task('build:clean:umd', () => del(['dist/umd']))
+gulp.task('build:clean:cjs', () => del(['lib/cjs']))
+gulp.task('build:clean:esm', () => del(['lib/esm']))
+gulp.task('build:clean:umd', () => del(['lib/umd']))
 gulp.task('build:clean', [
   'build:clean:cjs',
-  'build:clean:es',
+  'build:clean:esm',
   'build:clean:umd',
 ])
 
 gulp.task('build:cjs', ['build:clean:cjs'], () =>
   _getBabelStream(FORMAT_CJS)
     .pipe(debug({title: 'Building CJS'}))
-    .pipe(gulp.dest('dist/cjs'))
+    .pipe(gulp.dest('lib/cjs'))
 )
 
-gulp.task('build:es', ['build:clean:es'], () =>
-  _getBabelStream(FORMAT_ES)
-    .pipe(debug({title: 'Building ES:'}))
-    .pipe(gulp.dest('dist/es'))
+gulp.task('build:esm', ['build:clean:esm'], () =>
+  _getBabelStream(FORMAT_ESM)
+    .pipe(debug({title: 'Building ESM:'}))
+    .pipe(gulp.dest('lib/esm'))
 )
 
 gulp.task('build:umd', ['build:clean:umd'], () =>
@@ -99,7 +99,7 @@ gulp.task('build:umd', ['build:clean:umd'], () =>
     .pipe(replace('process.env.NODE_ENV', JSON.stringify('development')))
     .pipe(sourcemaps.write('./'))
     .pipe(debug({title: 'Building UMD:'}))
-    .pipe(gulp.dest('dist/umd'))
+    .pipe(gulp.dest('lib/umd'))
 )
 
 gulp.task('build:umd:min', ['build:clean:umd'], () =>
@@ -112,9 +112,9 @@ gulp.task('build:umd:min', ['build:clean:umd'], () =>
     .pipe(rename({extname: '.min.js'}))
     .pipe(sourcemaps.write('./'))
     .pipe(debug({title: 'Building + Minifying UMD:'}))
-    .pipe(gulp.dest('dist/umd'))
+    .pipe(gulp.dest('lib/umd'))
 )
 
-gulp.task('build', ['build:cjs', 'build:es', 'build:umd', 'build:umd:min'])
+gulp.task('build', ['build:cjs', 'build:esm', 'build:umd', 'build:umd:min'])
 
 gulp.task('default', ['build'])

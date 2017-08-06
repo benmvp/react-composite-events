@@ -15,26 +15,20 @@ script: yarn run validate -- -- --coverage
 
 # Scripts to run after validation tests run
 after_success:
-  # Install some packages globally we'll need
-  # - yarn global add coveralls semantic-release
+  # Install coveralls globally
   - yarn global add coveralls
 
-  # Retrieve the coverage informatino and send it to Coveralls
+  # Retrieve the coverage information and send it to Coveralls
   - cat ./coverage/lcov.info | coveralls
 
-  # 1. Update package.json version number based on commits
-  # 2. Publish new version to NPM
-  # 3. Generate changelog + release on Github
-  # - semantic-release pre && npm publish && semantic-release post
+# Build lib files
+before_deploy: yarn run build
 
-# Build dist files
-# before_deploy: yarn run bundle:web
-
-# Deploy to gh-pages branch on Github
-# deploy:
-#   skip_cleanup: true
-#   provider: script
-#   script:  ./_scripts/travis-deploy.sh
-#   on:
-#     branch: master
-#     node: "node"
+# Publish to NPM
+deploy:
+  skip_cleanup: true
+  provider: script
+  script:  ./_scripts/travis-deploy.sh
+  on:
+    branch: master
+    node: "node"
