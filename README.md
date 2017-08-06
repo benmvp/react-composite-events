@@ -2,7 +2,7 @@
 
 [![version](https://img.shields.io/npm/v/react-composite-events.svg)](http://npm.im/react-composite-events)
 [![downloads](https://img.shields.io/npm/dt/react-composite-events.svg)](http://npm-stat.com/charts.html?package=react-composite-events&from=2017-07-18)
-![module formats: umd, cjs, and es](https://img.shields.io/badge/module%20formats-umd%2C%20cjs%2C%20es-green.svg)
+![module formats: esm, cjs, & umd](https://img.shields.io/badge/module%20formats-ems%2C%20cjs%2C%20umd-green.svg)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 [![license](https://img.shields.io/github/license/benmvp/react-composite-events.svg)](LICENSE)
 

@@ -1,11 +1,11 @@
 language: node_js
 node_js:
   - "node"
-  # - "8"
-  # - "7"
-  # - "6"
-  # - "5"
-  # - "4"
+  - "8"
+  - "7"
+  - "6"
+  - "5"
+  - "4"
 
 # Cache dependencies in $HOME/.yarn-cache across builds
 cache: yarn
@@ -21,21 +21,14 @@ after_success:
   # Retrieve the coverage information and send it to Coveralls
   - cat ./coverage/lcov.info | coveralls
 
-  # 0. Build lib files
-  # 1. Update package.json version number based on commits
-  # 2. Publish new version to NPM
-  # 3. Generate changelog + release on Github
-  - yarn run build
-  - semantic-release pre && npm publish && semantic-release post
-
 # Build lib files
-# before_deploy: yarn run build
+before_deploy: yarn run build
 
 # Publish to NPM
-# deploy:
-#   skip_cleanup: true
-#   provider: script
-#   script:  ./_scripts/travis-deploy.sh
-#   on:
-#     branch: master
-#     node: "node"
+deploy:
+  skip_cleanup: true
+  provider: script
+  script:  ./_scripts/travis-deploy.sh
+  on:
+    branch: master
+    node: "node"
