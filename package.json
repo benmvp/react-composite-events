@@ -1,6 +1,6 @@
 {
   "name": "react-composite-events",
-  "version": "0.0.1",
+  "version": "0.0.0-semantically-released",
   "description": "A collection of higher-order components (HOCs) to easily create composite events in React components",
   "author": "Ben Ilegbodu <ben@benmvp.com>",
   "main": "lib/cjs/index.js",
