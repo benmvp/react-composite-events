@@ -1,0 +1,21 @@
+/.*/
+/.*
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Coverage directory from Jest
+coverage
+
+# Build scripts
+gulpfile.js
+
+# Test files
+src/*.spec.js
+
+# scripts
+_scripts

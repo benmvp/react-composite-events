@@ -123,7 +123,15 @@ The Composite Event HOCs are grouped by domain:
 
 ## Target Environments
 
-TBD...
+### Libraries
+
+- **ESM** - (EMCAScript modules) Everything transpiled to ES5 except for ES2015 `import`/`export` statements enabling [_tree shaking_](https://webpack.js.org/guides/tree-shaking/)
+- **CJS** - (CommonJS) Standard format for most bundling systems including Node
+- **AMD** - (asynchronous module definition) Async format for browsers
+
+### Bundled distributions
+
+Coming soon...
 
 ## Prior Art
 
