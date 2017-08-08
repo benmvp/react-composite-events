@@ -14,8 +14,8 @@ coverage
 # Build scripts
 gulpfile.js
 
-# Test files
-src/*.spec.js
+# All source files
+src
 
-# scripts
+# All script files
 _scripts
