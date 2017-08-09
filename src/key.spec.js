@@ -74,7 +74,7 @@ describe('`withKeyRemainDown`', () => {
     anchorWrapper.simulate('keyup')
 
     // 4. simulate going over time
-    jest.runTimersToTime(800)
+    jest.runTimersToTime(50)
 
     expect(onKeyRemainDown).toHaveBeenCalledTimes(0)
   })
@@ -141,7 +141,7 @@ describe('`withKeyRemainUp`', () => {
     dummyWrapper.prop('onKeyDown')()
 
     // 4. simulate going over time
-    jest.runTimersToTime(800)
+    jest.runTimersToTime(50)
 
     expect(onKeyRemainUp).toHaveBeenCalledTimes(0)
   })
