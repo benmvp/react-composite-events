@@ -6,8 +6,8 @@ The following collection of APIs apply primarily to components that handle mouse
 
 - [Higher-order components](#higher-order-components)
   - [`withMouseRest()`](#withmouserest)
-  - [`withMouseRemainOver()`](#withmouseremainover)
   - [`withMouseRemainOut()`](#withmouseremainout)
+  - [`withMouseRemainOver()`](#withmouseremainover)
   - [`withMouseEnterLeft()`](#withmouseenterleft)
   - [`withMouseEnterRight()`](#withmouseenterright)
   - [`withMouseEnterTop()`](#withmouseentertop)
@@ -84,64 +84,6 @@ See related [`withMouseRemainOver()`](#withmouseremainover).
 
 
 
-### `withMouseRemainOver()`
-
-```js
-withMouseRemainOver
-  duration: integer = 500
-): HigherOrderComponent
-```
-
-Creates an HOC for a composite event (named `onMouseRemainOver-*`) that is triggered when the user mouses over a component and doesn't mouse out of that component or mouse down on it for a specified duration of time. The user can continue to move the mouse over the component to trigger `onMouseRemainOver`.
-
-```js
-import {withMouseRemainOver} from 'react-composite-events'
-// or
-import {withMouseRemainOver} from 'react-composite-events/mouse'
-
-const EnhancedDiv = withMouseRemainOver(450)('div')
-
-export default MyComponent extends PureComponent {
-  _handleMouseRemainOver() {
-    console.log(`450ms with mouse remaining over`);
-  }
-
-  render() {
-    return (
-      <EnhancedDiv onMouseRemainOver-450={this._handleMouseRemainOver.bind(this)} />
-    )
-  }
-}
-```
-
-When no `duration` parameter is specified, then the value for this parameter is defaulted to `500` (500 milliseconds). In this case the composite event prop is simply `onMouseRemainOver`.
-
-```js
-import {withMouseRemainOver} from 'react-composite-events'
-// or
-import {withMouseRemainOver} from 'react-composite-events/mouse'
-
-const EnhancedDiv = withMouseRemainOver()('div')
-
-export default MyComponent extends PureComponent {
-  _handleMouseRemainOver() {
-    console.log(`default mouse remain over!`);
-  }
-
-  render() {
-    return (
-      <EnhancedDiv onMouseRemainOver={this._handleMouseRemainOver.bind(this)} />
-    )
-  }
-}
-```
-
-> `withMouseRemainOver` adds handlers for `onMouseOver`, `onMouseMove`, `onMouseOut` & `onMouseDown` to build the `onMouseRemainOver` composite event. The handler for `onMouseRemainOver` will receive the event object for either `onMouseOver` or `onMouseMove`, if it exists.
-
-See related [`withMouseRest()`](#withmouserest) & [`withMouseRemainOut()`](#withmouseremainout).
-
-
-
 ### `withMouseRemainOut()`
 
 ```js
@@ -197,6 +139,64 @@ export default MyComponent extends PureComponent {
 > `withMouseRemainOut` adds handlers for `onMouseOut` & `onMouseOver` to build the `onMouseRemainOut` composite event. The handler for `onMouseRemainOut` will receive the event object for `onMouseOut`, if it exists.
 
 See related [`withMouseRemainOver()`](#withmouseremainover).
+
+
+
+### `withMouseRemainOver()`
+
+```js
+withMouseRemainOver
+  duration: integer = 500
+): HigherOrderComponent
+```
+
+Creates an HOC for a composite event (named `onMouseRemainOver-*`) that is triggered when the user mouses over a component and doesn't mouse out of that component or mouse down on it for a specified duration of time. The user can continue to move the mouse over the component to trigger `onMouseRemainOver`.
+
+```js
+import {withMouseRemainOver} from 'react-composite-events'
+// or
+import {withMouseRemainOver} from 'react-composite-events/mouse'
+
+const EnhancedDiv = withMouseRemainOver(450)('div')
+
+export default MyComponent extends PureComponent {
+  _handleMouseRemainOver() {
+    console.log(`450ms with mouse remaining over`);
+  }
+
+  render() {
+    return (
+      <EnhancedDiv onMouseRemainOver-450={this._handleMouseRemainOver.bind(this)} />
+    )
+  }
+}
+```
+
+When no `duration` parameter is specified, then the value for this parameter is defaulted to `500` (500 milliseconds). In this case the composite event prop is simply `onMouseRemainOver`.
+
+```js
+import {withMouseRemainOver} from 'react-composite-events'
+// or
+import {withMouseRemainOver} from 'react-composite-events/mouse'
+
+const EnhancedDiv = withMouseRemainOver()('div')
+
+export default MyComponent extends PureComponent {
+  _handleMouseRemainOver() {
+    console.log(`default mouse remain over!`);
+  }
+
+  render() {
+    return (
+      <EnhancedDiv onMouseRemainOver={this._handleMouseRemainOver.bind(this)} />
+    )
+  }
+}
+```
+
+> `withMouseRemainOver` adds handlers for `onMouseOver`, `onMouseMove`, `onMouseOut` & `onMouseDown` to build the `onMouseRemainOver` composite event. The handler for `onMouseRemainOver` will receive the event object for either `onMouseOver` or `onMouseMove`, if it exists.
+
+See related [`withMouseRest()`](#withmouserest) & [`withMouseRemainOut()`](#withmouseremainout).
 
 
 
