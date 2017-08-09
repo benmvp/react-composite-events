@@ -13,3 +13,17 @@ export const withRemainReleased = compose({
   defaultDuration: 500,
   cancelEvent: ['onMouseDown', 'onPressIn'],
 })
+
+export const withRemainFocused = compose({
+  eventPropName: 'onRemainFocused',
+  triggerEvent: 'onFocus',
+  defaultDuration: 500,
+  cancelEvent: 'onBlur',
+})
+
+export const withRemainBlurred = compose({
+  eventPropName: 'onRemainBlurred',
+  triggerEvent: 'onBlur',
+  defaultDuration: 500,
+  cancelEvent: 'onFocus',
+})

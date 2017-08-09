@@ -1,6 +1,11 @@
 import React from 'react'
 import {shallow} from 'enzyme'
-import {withLongPress, withRemainReleased} from './generic'
+import {
+  withLongPress,
+  withRemainReleased,
+  withRemainFocused,
+  withRemainBlurred
+} from './generic'
 
 const Dummy = () => <div />
 
@@ -299,5 +304,146 @@ describe('`withRemainReleased`', () => {
     jest.runTimersToTime(800)
 
     expect(onRemainReleased).toHaveBeenCalledTimes(0)
+  })
+})
+
+describe('`withRemainFocused`', () => {
+  it('calls handler after focus & default 500 ms', () => {
+    const EnhancedAnchor = withRemainFocused()('a')
+
+    let onRemainFocused = jest.fn()
+    let wrapper = shallow(
+      <EnhancedAnchor
+        href="http://www.benmvp.com/"
+        onRemainFocused={onRemainFocused}
+      />
+    )
+    let anchorWrapper = wrapper.find('a')
+
+    expect(onRemainFocused).toHaveBeenCalledTimes(0)
+
+    // 1. simulate trigger
+    anchorWrapper.simulate('focus')
+
+    // 2. simulate going over time
+    jest.runTimersToTime(500)
+
+    expect(onRemainFocused).toHaveBeenCalledTimes(1)
+  })
+
+  it('calls handler after focus & specified duration', () => {
+    const EnhancedDummy = withRemainFocused(876)(Dummy)
+
+    let onRemainFocused = jest.fn()
+    let wrapper = shallow(
+      <EnhancedDummy onRemainFocused-876={onRemainFocused} />
+    )
+    let dummyWrapper = wrapper.find(Dummy)
+
+    expect(onRemainFocused).toHaveBeenCalledTimes(0)
+
+    // 1. simulate trigger
+    dummyWrapper.prop('onFocus')()
+
+    // 2. simulate going over time
+    jest.runTimersToTime(876)
+
+    expect(onRemainFocused).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not call handler if blur happens before duration expires', () => {
+    const EnhancedAnchor = withRemainFocused()('a')
+
+    let onRemainFocused = jest.fn()
+    let wrapper = shallow(
+      <EnhancedAnchor
+        href="http://www.benmvp.com/"
+        onRemainFocused={onRemainFocused}
+      />
+    )
+    let anchorWrapper = wrapper.find('a')
+
+    expect(onRemainFocused).toHaveBeenCalledTimes(0)
+
+    // 1. simulate trigger
+    anchorWrapper.simulate('focus')
+
+    // 2. simulate some time passing
+    jest.runTimersToTime(450)
+
+    // 3. simulate cancel event
+    anchorWrapper.simulate('blur')
+
+    // 4. simulate going over time
+    jest.runTimersToTime(800)
+
+    expect(onRemainFocused).toHaveBeenCalledTimes(0)
+  })
+})
+
+describe('`withRemainBlurred`', () => {
+  it('calls handler after blur & default 500 ms', () => {
+    const EnhancedDummy = withRemainBlurred()(Dummy)
+
+    let onRemainBlurred = jest.fn()
+    let wrapper = shallow(<EnhancedDummy onRemainBlurred={onRemainBlurred} />)
+    let dummyWrapper = wrapper.find(Dummy)
+
+    expect(onRemainBlurred).toHaveBeenCalledTimes(0)
+
+    // 1. simulate trigger
+    dummyWrapper.prop('onBlur')()
+
+    // 2. simulate going over time
+    jest.runTimersToTime(500)
+
+    expect(onRemainBlurred).toHaveBeenCalledTimes(1)
+  })
+
+  it('calls handler after blur & specified duration', () => {
+    const EnhancedAnchor = withRemainBlurred(450)('a')
+
+    let onRemainBlurred = jest.fn()
+    let wrapper = shallow(
+      <EnhancedAnchor
+        href="http://www.benmvp.com/"
+        onRemainBlurred-450={onRemainBlurred}
+      />
+    )
+    let anchorWrapper = wrapper.find('a')
+
+    expect(onRemainBlurred).toHaveBeenCalledTimes(0)
+
+    // 1. simulate trigger
+    anchorWrapper.simulate('blur')
+
+    // 2. simulate going over time
+    jest.runTimersToTime(450)
+
+    expect(onRemainBlurred).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not call handler if blur happens before duration expires', () => {
+    const EnhancedDummy = withRemainBlurred()(Dummy)
+
+    let onRemainBlurred = jest.fn()
+    let wrapper = shallow(<EnhancedDummy onRemainBlurred={onRemainBlurred} />)
+    let dummyWrapper = wrapper.find(Dummy)
+
+    expect(onRemainBlurred).toHaveBeenCalledTimes(0)
+
+    // 1. simulate trigger
+    dummyWrapper.prop('onBlur')()
+
+    // 2. simulate some time passing
+    jest.runTimersToTime(450)
+
+    // 3. simulate cancel event
+    dummyWrapper.prop('onFocus')()
+
+    // 4. simulate going over time
+    jest.runTimersToTime(800)
+
+    expect(onRemainBlurred).toHaveBeenCalledTimes(0)
   })
 })
