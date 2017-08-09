@@ -11,7 +11,7 @@ node_js:
 cache: yarn
 
 # Run the the validate script with code coverage
-script: yarn run validate -- -- --coverage
+script: yarn run validate -- -- --ci --coverage
 
 # Scripts to run after validation tests run
 after_success:

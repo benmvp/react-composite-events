@@ -31,7 +31,7 @@
     "format": "prettier-eslint --write 'src/**/*.js'",
     "lint": "eslint src",
     "precommit": "lint-staged && npm run validate",
-    "test": "jest --verbose",
+    "test": "jest",
     "validate": "npm run lint && npm test"
   },
   "lint-staged": {
