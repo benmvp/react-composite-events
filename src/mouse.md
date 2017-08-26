@@ -30,7 +30,7 @@ The following collection of APIs apply primarily to components that handle mouse
 
 ```js
 withMouseRest
-  duration: integer = 500
+  duration?: integer = 500
 ): HigherOrderComponent
 ```
 
@@ -88,7 +88,7 @@ See related [`withMouseRemainOver()`](#withmouseremainover).
 
 ```js
 withMouseRemainOut
-  duration: integer = 500
+  duration?: integer = 500
 ): HigherOrderComponent
 ```
 
@@ -146,7 +146,7 @@ See related [`withMouseRemainOver()`](#withmouseremainover).
 
 ```js
 withMouseRemainOver
-  duration: integer = 500
+  duration?: integer = 500
 ): HigherOrderComponent
 ```
 

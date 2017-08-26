@@ -4,10 +4,10 @@
 compose({
   eventPropName: string,
   triggerEvent: string | string[],
-  ?defaultDuration: number = 0,
-  ?cancelEvent: string | string[],
-  ?shouldResetTimerOnRetrigger: boolean = true,
-  ?beforeHandle: (handler: (?event: Event) => void, ?event: Event) => boolean | void
+  defaultDuration?: number = 0,
+  cancelEvent?: string | string[],
+  shouldResetTimerOnRetrigger?: boolean = true,
+  beforeHandle?: (handler: (event?: SyntheticEvent) => void, event?: SyntheticEvent) => boolean | void
 }): HigherOrderComponent
 ```
 
@@ -117,7 +117,7 @@ When `defaultDuration` is omitted, the resultant higher-order component doesn't 
 ```js
 import {compose} from 'react-composite-events'
 // or
-import compose from 'react-composite-events/compose'/
+import compose from 'react-composite-events/compose'
 
 // make your own "mouse rest" composite event by passing configuration
 // options to `compose`

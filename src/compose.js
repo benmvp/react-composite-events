@@ -1,6 +1,22 @@
-import React, {PureComponent} from 'react'
+// @flow
+import React from 'react'
+import type {ComponentType} from 'react'
 
-const _omit = (props, propToOmit) => {
+type EventName = string
+type TimerEvent = EventName | EventName[]
+type ComposerSettings = {
+  eventPropName: EventName,
+  triggerEvent: TimerEvent,
+  defaultDuration?: number,
+  cancelEvent?: TimerEvent,
+  shouldResetTimerOnRetrigger?: boolean,
+  beforeHandle?: (
+    handler: (event?: SyntheticEvent<>) => void,
+    event?: SyntheticEvent<>
+  ) => boolean | void,
+}
+
+const _omit = (props: {}, propToOmit: string): {} => {
   let propsCopy = {...props}
 
   delete propsCopy[propToOmit]
@@ -8,7 +24,10 @@ const _omit = (props, propToOmit) => {
   return propsCopy
 }
 
-const _eventNamesToHandlerLookup = (eventNames, handler) =>
+const _eventNamesToHandlerLookup = (
+  eventNames?: EventName[],
+  handler: (eventName: EventName, event?: SyntheticEvent<>) => void
+): {} =>
   (eventNames || []).reduce(
     (lookup, eventName) => ({
       ...lookup,
@@ -16,7 +35,7 @@ const _eventNamesToHandlerLookup = (eventNames, handler) =>
     }),
     {}
   )
-const _isValidDuration = (duration) => duration > 0
+const _isValidDuration = (duration: number): boolean => duration > 0
 
 export default ({
   eventPropName,
@@ -25,7 +44,7 @@ export default ({
   cancelEvent,
   shouldResetTimerOnRetrigger = true,
   beforeHandle = () => true,
-}) => {
+}: ComposerSettings) => {
   if (process.env.NODE_ENV !== 'production' && !eventPropName) {
     throw new Error('`eventPropName` configuration must be specified')
   }
@@ -36,10 +55,15 @@ export default ({
   let triggerEvents = Array.isArray(triggerEvent)
     ? triggerEvent
     : [triggerEvent]
-  let cancelEvents =
-    !cancelEvent || Array.isArray(cancelEvent) ? cancelEvent : [cancelEvent]
+  let cancelEvents
 
-  return (duration) => {
+  if (cancelEvent) {
+    cancelEvents = Array.isArray(cancelEvent) ? cancelEvent : [cancelEvent]
+  }
+
+  return <Props: {}>(
+    duration: number
+  ): ((ComponentType<any>) => ComponentType<Props>) => {
     let timeoutDuration = defaultDuration
     let durationSuffix = ''
 
@@ -58,15 +82,12 @@ export default ({
         throw new Error('Component to enhance must be specified')
       }
 
-      let componentDisplayName =
-        Component.displayName || Component.name || Component
-
-      return class extends PureComponent {
-        static displayName = `${componentDisplayName}-${eventPropName}${durationSuffix}`
+      return class extends React.Component<any> {
+        static displayName = `CompositeEvent-${eventPropName}${durationSuffix}`
 
         _delayTimeout = null
 
-        _callSpecificHandler = (eventName, e) => {
+        _callSpecificHandler = (eventName: EventName, e?: SyntheticEvent<>) => {
           let onEvent = this.props[eventName]
 
           if (onEvent) {
@@ -78,7 +99,7 @@ export default ({
           this._delayTimeout = clearTimeout(this._delayTimeout)
         }
 
-        _callCompositeEvent = (e) => {
+        _callCompositeEvent = (e?: SyntheticEvent<>) => {
           let onCompositeEvent = this.props[compositeEventPropName]
 
           // If a before handle function is defined, call it and check to see what the function returns
@@ -91,7 +112,7 @@ export default ({
           }
         }
 
-        _handleTriggerEvent = (eventName, e) => {
+        _handleTriggerEvent = (eventName: EventName, e?: SyntheticEvent<>) => {
           let onCompositeEvent = this.props[compositeEventPropName]
 
           // If a specific handler was passed, call that one first
@@ -123,7 +144,7 @@ export default ({
           }
         }
 
-        _handleCancelEvent = (eventName, e) => {
+        _handleCancelEvent = (eventName: EventName, e?: SyntheticEvent<>) => {
           // If a specific handler was passed, call that one first
           this._callSpecificHandler(eventName, e)
 

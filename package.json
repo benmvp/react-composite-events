@@ -28,11 +28,13 @@
   "license": "MIT",
   "scripts": {
     "build": "gulp",
+    "check": "npm run lint && npm run flow",
+    "flow": "flow",
     "format": "prettier-eslint --write 'src/**/*.js'",
     "lint": "eslint src",
     "precommit": "lint-staged && npm run validate",
     "test": "jest",
-    "validate": "npm run lint && npm test"
+    "validate": "npm run check && npm test"
   },
   "lint-staged": {
     "*.js": ["npm run format", "git add"]
@@ -48,7 +50,8 @@
         }
       ],
       "stage-3",
-      "react"
+      "react",
+      "flow"
     ],
     "plugins": ["transform-class-properties"]
   },
@@ -63,6 +66,9 @@
     },
     "env": {
       "jest": true
+    },
+    "globals": {
+      "SyntheticEvent": false
     }
   },
   "jest": {
@@ -79,6 +85,7 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-es2015-modules-umd": "^6.24.1",
     "babel-preset-env": "^1.6.0",
+    "babel-preset-flow": "^6.23.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-3": "^6.24.1",
     "del": "^3.0.0",
@@ -88,6 +95,7 @@
     "eslint-plugin-import": "^2.0.0",
     "eslint-plugin-jsx-a11y": "^6.0.0",
     "eslint-plugin-react": "^6.0.0",
+    "flow-bin": "^0.53.1",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "gulp-debug": "^3.1.0",

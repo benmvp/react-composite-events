@@ -16,7 +16,7 @@ The following collection of APIs apply primarily to DOM components that handle k
 
 ```js
 withKeyRemainDown
-  ?duration: integer = 500
+  duration?: integer = 500
 ): HigherOrderComponent
 ```
 
@@ -73,7 +73,7 @@ See related [`withKeyRemainUp()`](#withkeyremainup).
 
 ```js
 withKeyRemainUp
-  ?duration: integer = 500
+  duration?: integer = 500
 ): HigherOrderComponent
 ```
 

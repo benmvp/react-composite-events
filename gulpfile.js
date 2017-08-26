@@ -62,7 +62,12 @@ const UMD_TRANSFORM_PLUGIN = [
 const _getBabelConfig = (format) => ({
   babelrc: false,
 
-  presets: [format === FORMAT_ESM ? ESM_ENV_PRESET : 'env', 'stage-3', 'react'],
+  presets: [
+    format === FORMAT_ESM ? ESM_ENV_PRESET : 'env',
+    'stage-3',
+    'react',
+    'flow',
+  ],
   plugins: [
     'transform-class-properties',
     'external-helpers',

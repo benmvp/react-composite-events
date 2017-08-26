@@ -1,3 +1,4 @@
+// @flow
 import compose from './compose'
 
 export const withLongPress = compose({
