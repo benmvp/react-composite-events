@@ -24,10 +24,12 @@ const _omit = (props: {}, propToOmit: string): {} => {
   return propsCopy
 }
 
+type InternalHandler = (eventName: EventName, event?: SyntheticEvent<>) => void
+
 const _eventNamesToHandlerLookup = (
   eventNames?: EventName[],
-  handler: (eventName: EventName, event?: SyntheticEvent<>) => void
-): {} =>
+  handler: InternalHandler
+): {[EventName]: InternalHandler} =>
   (eventNames || []).reduce(
     (lookup, eventName) => ({
       ...lookup,
@@ -61,9 +63,7 @@ export default ({
     cancelEvents = Array.isArray(cancelEvent) ? cancelEvent : [cancelEvent]
   }
 
-  return <Props: {}>(
-    duration: number
-  ): ((ComponentType<any>) => ComponentType<Props>) => {
+  return (duration: number) => {
     let timeoutDuration = defaultDuration
     let durationSuffix = ''
 
@@ -77,12 +77,12 @@ export default ({
     // if the duration is passed the composite even prop name needs to be parameterized
     let compositeEventPropName = `${eventPropName}${durationSuffix}`
 
-    return (Component) => {
+    return <Props: {}>(Component: ComponentType<{}>): ComponentType<Props> => {
       if (process.env.NODE_ENV !== 'production' && !Component) {
         throw new Error('Component to enhance must be specified')
       }
 
-      return class extends React.Component<any> {
+      return class extends React.Component<Props> {
         static displayName = `CompositeEvent-${eventPropName}${durationSuffix}`
 
         _delayTimeout = null
