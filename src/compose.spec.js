@@ -1,6 +1,9 @@
+// @flow
+/* eslint-disable no-console */
 import React from 'react'
 import {shallow, mount} from 'enzyme'
 import compose from './compose'
+import {getDisplayName} from './utils'
 
 const Dummy = () => <div />
 
@@ -20,15 +23,18 @@ jest.useFakeTimers()
 describe('compose', () => {
   describe('error handling', () => {
     it('throws an error if no configuration object is specified', () => {
+      // $FlowIgnore: error handling test case
       expect(() => compose()).toThrow()
     })
 
     it('throws an error if no configurations are specified', () => {
+      // $FlowIgnore: error handling test case
       expect(() => compose({})).toThrow()
     })
 
     it('throws an error if no `triggerEvent` is specified when `eventPropName` is', () => {
       expect(() =>
+        // $FlowIgnore: error handling test case
         compose({
           eventPropName: 'compositeEvent',
         })
@@ -37,6 +43,7 @@ describe('compose', () => {
 
     it('throws an error if no `eventPropName` is specified when `triggerEvent` is', () => {
       expect(() =>
+        // $FlowIgnore: error handling test case
         compose({
           triggerEvent: 'onClick',
         })
@@ -66,6 +73,7 @@ describe('compose', () => {
       })
 
       // throws an error because no Component was specified
+      // $FlowIgnore: error handling test case
       expect(() => withCompositeEvent()()).toThrow()
     })
 
@@ -190,6 +198,8 @@ describe('compose', () => {
       })
       const EnhancedDummy = withCompositeEvent()(Dummy)
 
+      expect(getDisplayName(EnhancedDummy)).toBe('Dummy-onCompositeEvent')
+
       let onCompositeEvent = jest.fn()
       let wrapper = shallow(
         <EnhancedDummy onCompositeEvent={onCompositeEvent} />
@@ -211,6 +221,8 @@ describe('compose', () => {
       })
       const EnhancedDiv = withCompositeEvent()('div')
 
+      expect(getDisplayName(EnhancedDiv)).toBe('div-onCompositeEvent')
+
       let onCompositeEvent = jest.fn()
       let wrapper = shallow(<EnhancedDiv onCompositeEvent={onCompositeEvent} />)
       let divWrapper = wrapper.find('div')
@@ -229,6 +241,7 @@ describe('compose', () => {
     })
 
     it('does not blow up when composite event handler is not passed', () => {
+      const warn = console.warn
       const withCompositeEvent = compose({
         eventPropName: 'onCompositeEvent',
         triggerEvent: ['onMouseDown', 'onMouseUp'],
@@ -238,9 +251,19 @@ describe('compose', () => {
       let wrapper = shallow(<EnhancedDiv />)
       let divWrapper = wrapper.find('div')
 
+      // override with mock function
+      // $FlowIgnore: mocking
+      console.warn = jest.fn()
+
       // verify that simulating trigger event even though composite even thandler
       // wasn't passed doesn't blow up
       expect(() => divWrapper.simulate('mousedown')).not.toThrow()
+
+      expect(console.warn).toHaveBeenCalledTimes(1)
+
+      // restore real implementation
+      // $FlowIgnore: mocking
+      console.warn = warn
     })
 
     it('does not blow up passing unsupported events as triggers', () => {
@@ -249,6 +272,8 @@ describe('compose', () => {
         triggerEvent: ['onMouseDown', 'onPressIn'],
       })
       const EnhancedSection = withCompositeEvent()('section')
+
+      expect(getDisplayName(EnhancedSection)).toBe('section-onCompositeEvent')
 
       let onCompositeEvent = jest.fn()
       let wrapper = shallow(
@@ -271,6 +296,8 @@ describe('compose', () => {
       })
       const EnhancedLabel = withCompositeEvent()('label')
 
+      expect(getDisplayName(EnhancedLabel)).toBe('label-onCompositeEvent')
+
       let onCompositeEvent = jest.fn()
       let wrapper = shallow(
         <EnhancedLabel onCompositeEvent={onCompositeEvent} />
@@ -291,6 +318,8 @@ describe('compose', () => {
         triggerEvent: 'onMouseEnter',
       })
       const EnhancedMain = withCompositeEvent()('main')
+
+      expect(getDisplayName(EnhancedMain)).toBe('main-onCompositeEvent')
 
       let onCompositeEvent = jest.fn()
       let onMouseEnter = jest.fn()
@@ -319,6 +348,8 @@ describe('compose', () => {
         triggerEvent: ['onClick', 'onKeyPress'],
       })
       const EnhancedSpan = withCompositeEvent()('span')
+
+      expect(getDisplayName(EnhancedSpan)).toBe('span-onCompositeEvent')
 
       let onCompositeEvent = jest.fn()
       let onClick = jest.fn()
@@ -352,6 +383,8 @@ describe('compose', () => {
       })
       const EnhancedNav = withCompositeEvent()('nav')
 
+      expect(getDisplayName(EnhancedNav)).toBe('nav-onCompositeEvent')
+
       let onCompositeEvent = jest.fn()
       let wrapper = shallow(<EnhancedNav onCompositeEvent={onCompositeEvent} />)
       let navWrapper = wrapper.find('nav')
@@ -376,6 +409,10 @@ describe('compose', () => {
         triggerEvent: 'onMouseOver',
       })
       const EnhancedNav = withCompositeEventB()(withCompositeEventA()('nav'))
+
+      expect(getDisplayName(EnhancedNav)).toBe(
+        'nav-onCompositeEventA-onCompositeEventB'
+      )
 
       let onCompositeEventA = jest.fn()
       let onCompositeEventB = jest.fn()
@@ -443,6 +480,8 @@ describe('compose', () => {
       })
       const EnhancedDummy = withCompositeEvent()(Dummy)
 
+      expect(getDisplayName(EnhancedDummy)).toBe('Dummy-onCompositeEvent')
+
       let onCompositeEvent = jest.fn()
       let wrapper = shallow(
         <EnhancedDummy onCompositeEvent={onCompositeEvent} />
@@ -477,6 +516,8 @@ describe('compose', () => {
 
       // specify delay override
       const EnhancedDummy = withCompositeEvent(300)(Dummy)
+
+      expect(getDisplayName(EnhancedDummy)).toBe('Dummy-onCompositeEvent-300')
 
       let onCompositeEvent = jest.fn()
       let wrapper = shallow(
@@ -517,6 +558,8 @@ describe('compose', () => {
       })
       const EnhancedDummy = withCompositeEvent()(Dummy)
 
+      expect(getDisplayName(EnhancedDummy)).toBe('Dummy-onCompositeEvent')
+
       let onCompositeEvent = jest.fn()
       let wrapper = shallow(
         <EnhancedDummy onCompositeEvent={onCompositeEvent} />
@@ -547,6 +590,8 @@ describe('compose', () => {
 
       // specify delay override
       const EnhancedDummy = withCompositeEvent(-300)(Dummy)
+
+      expect(getDisplayName(EnhancedDummy)).toBe('Dummy-onCompositeEvent')
 
       let onCompositeEvent = jest.fn()
       let onCompositeEvent300 = jest.fn()
@@ -630,6 +675,7 @@ describe('compose', () => {
     })
 
     it('does not call composite event handler with generic name with delay override', () => {
+      const warn = console.warn
       const withCompositeEvent = compose({
         eventPropName: 'onCompositeEvent',
         triggerEvent: 'onDummyEvent',
@@ -639,7 +685,12 @@ describe('compose', () => {
       // specify delay override
       const EnhancedDummy = withCompositeEvent(500)(Dummy)
 
+      expect(getDisplayName(EnhancedDummy)).toBe('Dummy-onCompositeEvent-500')
+
       let onCompositeEvent = jest.fn()
+
+      // $FlowIgnore: mocking
+      console.warn = jest.fn()
 
       // use generic name instead of expected parameterized name
       let wrapper = shallow(
@@ -664,6 +715,12 @@ describe('compose', () => {
 
       // still not called because used the generic name
       expect(onCompositeEvent).toHaveBeenCalledTimes(0)
+
+      // verify we get the warning that we didn't add handler for `onCompositeEvent-500`
+      expect(console.warn).toHaveBeenCalledTimes(1)
+
+      // $FlowIgnore: mocking
+      console.warn = warn
     })
 
     it('calls multiple composite event handlers with different duration overrides at the right time', () => {
@@ -676,6 +733,10 @@ describe('compose', () => {
       // add multiple composite events
       const EnhancedDummy = withCompositeEvent(1000)(
         withCompositeEvent(450)(withCompositeEvent()(Dummy))
+      )
+
+      expect(getDisplayName(EnhancedDummy)).toBe(
+        'Dummy-onCompositeEvent-onCompositeEvent-450-onCompositeEvent-1000'
       )
 
       let onCompositeEvent = jest.fn()
