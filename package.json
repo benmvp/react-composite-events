@@ -68,7 +68,8 @@
       "jest": true
     },
     "globals": {
-      "SyntheticEvent": false
+      "SyntheticEvent": false,
+      "SyntheticMouseEvent": false
     }
   },
   "jest": {

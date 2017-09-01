@@ -1,6 +1,17 @@
+// @flow
 import React from 'react'
 import {shallow} from 'enzyme'
-import {withMouseRest, withMouseRemainOut, withMouseRemainOver} from './mouse'
+import {
+  withMouseRest,
+  withMouseRemainOut,
+  withMouseRemainOver,
+  composeMouseModifierKey,
+  withOnlyClick,
+  withAltClick,
+  withCtrlClick,
+  withMetaClick,
+  withShiftClick
+} from './mouse'
 
 jest.useFakeTimers()
 
@@ -437,5 +448,356 @@ describe('`withMouseRemainOut`', () => {
     jest.runTimersToTime(350)
 
     expect(onMouseRemainOut).toHaveBeenCalledTimes(0)
+  })
+})
+
+describe('`composeMouseModifierKey`', () => {
+  describe('error handling', () => {
+    it('throws an error if no configuration object is specified', () => {
+      // $FlowIgnore: error handling test case
+      expect(() => composeMouseModifierKey()).toThrow()
+    })
+
+    it('throws an error if no configurations are specified', () => {
+      // $FlowIgnore: error handling test case
+      expect(() => composeMouseModifierKey({})).toThrow()
+    })
+
+    it('throws an error if no `mouseEvent` is specified when `eventPropName` is', () => {
+      expect(() =>
+        // $FlowIgnore: error handling test case
+        composeMouseModifierKey({
+          eventPropName: 'compositeEvent',
+        })
+      ).toThrow()
+    })
+
+    it('throws an error if no `eventPropName` is specified when `mouseEvent` is', () => {
+      expect(() =>
+        // $FlowIgnore: error handling test case
+        composeMouseModifierKey({
+          mouseEvent: 'onMouseEnter',
+        })
+      ).toThrow()
+    })
+
+    it('does not throw an error when `eventPropName` & `mouseEvent` configurations are specified', () => {
+      const withMouseModifierKey = () =>
+        composeMouseModifierKey({
+          eventPropName: 'compositeEvent',
+          mouseEvent: 'onMouseLeave',
+        })
+
+      expect(withMouseModifierKey).not.toThrow()
+
+      let mouseModifierKeyHOC = withMouseModifierKey()
+
+      expect(mouseModifierKeyHOC).toBeDefined()
+      expect(mouseModifierKeyHOC).not.toBeNull()
+      expect(mouseModifierKeyHOC).toBeInstanceOf(Function)
+    })
+  })
+
+  type Config = {
+    alt: boolean,
+    ctrl: boolean,
+    meta: boolean,
+    shift: boolean,
+  }
+  type KeyConfig = {
+    altKey: boolean,
+    ctrlKey: boolean,
+    metaKey: boolean,
+    shiftKey: boolean,
+  }
+
+  const FLAG_OPTIONS = [false, true]
+  const _genFlags = (callback: Config => void) => {
+    for (let shift of FLAG_OPTIONS) {
+      for (let meta of FLAG_OPTIONS) {
+        for (let ctrl of FLAG_OPTIONS) {
+          for (let alt of FLAG_OPTIONS) {
+            callback({alt, ctrl, meta, shift})
+          }
+        }
+      }
+    }
+  }
+  const _configToKeys = (config: Config): KeyConfig => {
+    let keys = {
+      altKey: false,
+      ctrlKey: false,
+      metaKey: false,
+      shiftKey: false,
+    }
+
+    for (let configName of Object.keys(config)) {
+      keys[`${configName}Key`] = config[configName]
+    }
+
+    return keys
+  }
+  const _flipValues = (obj: KeyConfig): KeyConfig => {
+    let flippedObj = {...obj}
+
+    for (let key of Object.keys(flippedObj)) {
+      flippedObj[key] = !flippedObj[key]
+    }
+
+    return flippedObj
+  }
+
+  describe('flags', () => {
+    _genFlags((keyConfig) => {
+      describe(JSON.stringify(keyConfig), () => {
+        it('calls handler when there is an exact match of modifier keys', () => {
+          const withMouseModifierKey = composeMouseModifierKey({
+            eventPropName: 'onCompositeEvent',
+            mouseEvent: 'onMouseUp',
+            ...keyConfig,
+          })
+          const EnhancedNav = withMouseModifierKey()('nav')
+
+          let onCompositeEvent = jest.fn()
+          let wrapper = shallow(
+            <EnhancedNav onCompositeEvent={onCompositeEvent} />
+          )
+          let navWrapper = wrapper.find('nav')
+          let fakeEventObject = _configToKeys(keyConfig)
+
+          // simulate trigger event
+          navWrapper.simulate('mouseup', fakeEventObject)
+
+          expect(onCompositeEvent).toHaveBeenCalledTimes(1)
+          expect(onCompositeEvent).toHaveBeenCalledWith(fakeEventObject)
+        })
+
+        it('does not call handler when there is not an exact match of modifier keys', () => {
+          const withMouseModifierKey = composeMouseModifierKey({
+            eventPropName: 'onCompositeEvent',
+            mouseEvent: 'onMouseLeave',
+            ...keyConfig,
+          })
+          const EnhancedNav = withMouseModifierKey()('nav')
+
+          let onCompositeEvent = jest.fn()
+          let wrapper = shallow(
+            <EnhancedNav onCompositeEvent={onCompositeEvent} />
+          )
+          let navWrapper = wrapper.find('nav')
+          let fakeEventObject = _flipValues(_configToKeys(keyConfig))
+
+          // simulate trigger event
+          navWrapper.simulate('mouseleave', fakeEventObject)
+
+          expect(onCompositeEvent).toHaveBeenCalledTimes(0)
+        })
+      })
+    })
+  })
+})
+
+describe('`withOnlyClick`', () => {
+  it('calls handler when no modifier keys are pressed', () => {
+    const EnhancedDiv = withOnlyClick()('div')
+
+    let onOnlyClick = jest.fn()
+    let wrapper = shallow(<EnhancedDiv onOnlyClick={onOnlyClick} />)
+    let divWrapper = wrapper.find('div')
+    let fakeEventObject = {
+      altKey: false,
+      ctrlKey: false,
+      metaKey: false,
+      shiftKey: false,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('click', fakeEventObject)
+
+    expect(onOnlyClick).toHaveBeenCalledTimes(1)
+    expect(onOnlyClick).toHaveBeenCalledWith(fakeEventObject)
+  })
+
+  it('does not call handler when a modifier key is pressed', () => {
+    const EnhancedDiv = withOnlyClick()('div')
+
+    let onOnlyClick = jest.fn()
+    let wrapper = shallow(<EnhancedDiv onOnlyClick={onOnlyClick} />)
+    let divWrapper = wrapper.find('div')
+    let fakeEventObject = {
+      altKey: false,
+      ctrlKey: false,
+      metaKey: true,
+      shiftKey: false,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('click', fakeEventObject)
+
+    expect(onOnlyClick).toHaveBeenCalledTimes(0)
+  })
+})
+
+describe('`withAltClick`', () => {
+  it('calls handler when only Alt modifier key is pressed', () => {
+    const EnhancedDiv = withAltClick()('div')
+
+    let onAltClick = jest.fn()
+    let wrapper = shallow(<EnhancedDiv onAltClick={onAltClick} />)
+    let divWrapper = wrapper.find('div')
+    let fakeEventObject = {
+      altKey: true,
+      ctrlKey: false,
+      metaKey: false,
+      shiftKey: false,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('click', fakeEventObject)
+
+    expect(onAltClick).toHaveBeenCalledTimes(1)
+    expect(onAltClick).toHaveBeenCalledWith(fakeEventObject)
+  })
+
+  it('does not call handler when more than just the Alt modifier key is pressed', () => {
+    const EnhancedDiv = withAltClick()('div')
+
+    let onAltClick = jest.fn()
+    let wrapper = shallow(<EnhancedDiv onAltClick={onAltClick} />)
+    let divWrapper = wrapper.find('div')
+    let fakeEventObject = {
+      altKey: true,
+      ctrlKey: false,
+      metaKey: true,
+      shiftKey: false,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('click', fakeEventObject)
+
+    expect(onAltClick).toHaveBeenCalledTimes(0)
+  })
+})
+
+describe('`withCtrlClick`', () => {
+  it('calls handler when only Ctrl modifier key is pressed', () => {
+    const EnhancedDiv = withCtrlClick()('div')
+
+    let onCtrlClick = jest.fn()
+    let wrapper = shallow(<EnhancedDiv onCtrlClick={onCtrlClick} />)
+    let divWrapper = wrapper.find('div')
+    let fakeEventObject = {
+      altKey: false,
+      ctrlKey: true,
+      metaKey: false,
+      shiftKey: false,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('click', fakeEventObject)
+
+    expect(onCtrlClick).toHaveBeenCalledTimes(1)
+    expect(onCtrlClick).toHaveBeenCalledWith(fakeEventObject)
+  })
+
+  it('does not call handler when more than just the Ctrl modifier key is pressed', () => {
+    const EnhancedDiv = withCtrlClick()('div')
+
+    let onCtrlClick = jest.fn()
+    let wrapper = shallow(<EnhancedDiv onCtrlClick={onCtrlClick} />)
+    let divWrapper = wrapper.find('div')
+    let fakeEventObject = {
+      altKey: true,
+      ctrlKey: true,
+      metaKey: false,
+      shiftKey: false,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('click', fakeEventObject)
+
+    expect(onCtrlClick).toHaveBeenCalledTimes(0)
+  })
+})
+
+describe('`withMetaClick`', () => {
+  it('calls handler when only Meta modifier key is pressed', () => {
+    const EnhancedDiv = withMetaClick()('div')
+
+    let onMetaClick = jest.fn()
+    let wrapper = shallow(<EnhancedDiv onMetaClick={onMetaClick} />)
+    let divWrapper = wrapper.find('div')
+    let fakeEventObject = {
+      altKey: false,
+      ctrlKey: false,
+      metaKey: true,
+      shiftKey: false,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('click', fakeEventObject)
+
+    expect(onMetaClick).toHaveBeenCalledTimes(1)
+    expect(onMetaClick).toHaveBeenCalledWith(fakeEventObject)
+  })
+
+  it('does not call handler when more than just the Meta modifier key is pressed', () => {
+    const EnhancedDiv = withMetaClick()('div')
+
+    let onMetaClick = jest.fn()
+    let wrapper = shallow(<EnhancedDiv onMetaClick={onMetaClick} />)
+    let divWrapper = wrapper.find('div')
+    let fakeEventObject = {
+      altKey: false,
+      ctrlKey: true,
+      metaKey: true,
+      shiftKey: false,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('click', fakeEventObject)
+
+    expect(onMetaClick).toHaveBeenCalledTimes(0)
+  })
+})
+
+describe('`withShiftClick`', () => {
+  it('calls handler when only Shift modifier key is pressed', () => {
+    const EnhancedDiv = withShiftClick()('div')
+
+    let onShiftClick = jest.fn()
+    let wrapper = shallow(<EnhancedDiv onShiftClick={onShiftClick} />)
+    let divWrapper = wrapper.find('div')
+    let fakeEventObject = {
+      altKey: false,
+      ctrlKey: false,
+      metaKey: false,
+      shiftKey: true,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('click', fakeEventObject)
+
+    expect(onShiftClick).toHaveBeenCalledTimes(1)
+    expect(onShiftClick).toHaveBeenCalledWith(fakeEventObject)
+  })
+
+  it('does not call handler when more than just the Shift modifier key is pressed', () => {
+    const EnhancedDiv = withShiftClick()('div')
+
+    let onShiftClick = jest.fn()
+    let wrapper = shallow(<EnhancedDiv onShiftClick={onShiftClick} />)
+    let divWrapper = wrapper.find('div')
+    let fakeEventObject = {
+      altKey: false,
+      ctrlKey: true,
+      metaKey: false,
+      shiftKey: true,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('click', fakeEventObject)
+
+    expect(onShiftClick).toHaveBeenCalledTimes(0)
   })
 })

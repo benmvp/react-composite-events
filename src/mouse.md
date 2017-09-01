@@ -649,10 +649,10 @@ See related [`composeMouseModifierKey()`](#composemousemodifierkey), [`withOnlyC
 composeMouseModifierKey({
   eventPropName: string,
   mouseEvent: string,
-  ?alt: boolean = false,
-  ?ctrl: boolean = false,
-  ?meta: boolean = false,
-  ?shift: boolean = false
+  alt?: boolean = false,
+  ctrl?: boolean = false,
+  meta?: boolean = false,
+  shift?: boolean = false
 }): HigherOrderComponent
 ```
 
