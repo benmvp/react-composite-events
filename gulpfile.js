@@ -10,6 +10,7 @@ const debug = require('gulp-debug')
 const util = require('gulp-util')
 
 const del = require('del')
+const flowCopySource = require('flow-copy-source')
 
 const {rollup} = require('rollup')
 const rollupBabel = require('rollup-plugin-babel')
@@ -152,6 +153,12 @@ const _genRollupDist = (minify = false) =>
     })
   )
 
+const _copyFlow = (format) =>
+  flowCopySource(['src'], `lib/${format}`, {
+    verbose: true,
+    ignore: '**/*.spec.js',
+  })
+
 gulp.task('build:clean:lib:cjs', () => del(['lib/cjs']))
 gulp.task('build:clean:lib:esm', () => del(['lib/esm']))
 gulp.task('build:clean:lib:umd', () => del(['lib/umd']))
@@ -169,11 +176,15 @@ gulp.task('build:lib:cjs', ['build:clean:lib:cjs'], () =>
     .pipe(gulp.dest('lib/cjs'))
 )
 
+gulp.task('build:lib:cjs:flow', ['build:lib:cjs'], () => _copyFlow(FORMAT_CJS))
+
 gulp.task('build:lib:esm', ['build:clean:lib:esm'], () =>
   _getBabelStream(FORMAT_ESM)
     .pipe(debug({title: 'Building ESM:'}))
     .pipe(gulp.dest('lib/esm'))
 )
+
+gulp.task('build:lib:esm:flow', ['build:lib:esm'], () => _copyFlow(FORMAT_ESM))
 
 gulp.task('build:lib:umd', ['build:clean:lib:umd'], () =>
   _getBabelStream(FORMAT_UMD)
@@ -203,8 +214,8 @@ gulp.task('build:dist', ['build:clean:dist'], () => _genRollupDist())
 gulp.task('build:dist:min', ['build:clean:dist'], () => _genRollupDist(true))
 
 gulp.task('build', [
-  'build:lib:cjs',
-  'build:lib:esm',
+  'build:lib:cjs:flow',
+  'build:lib:esm:flow',
   'build:lib:umd',
   'build:lib:umd:min',
   'build:dist',
