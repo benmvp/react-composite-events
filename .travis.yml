@@ -25,15 +25,3 @@ after_success:
   # 3. Generate changelog + release on Github
   - yarn run build
   - semantic-release pre && npm publish && semantic-release post
-
-# Build web bundle
-# before_deploy: yarn run bundle
-
-# Publish to NPM
-# deploy:
-#   skip_cleanup: true
-#   provider: script
-#   script:  ./_scripts/travis-deploy.sh
-#   on:
-#     branch: master
-#     node: "node"

@@ -1,6 +1,7 @@
 // @flow
-import React from 'react'
-import type {ComponentType} from 'react'
+import React, {Component} from 'react'
+import type {ElementType, ComponentType} from 'react'
+import {getDisplayName} from './utils'
 
 type EventName = string
 type TimerEvent = EventName | EventName[]
@@ -15,6 +16,7 @@ type ComposerSettings = {
     event?: SyntheticEvent<>
   ) => boolean | void,
 }
+type InternalHandler = (eventName: EventName, event?: SyntheticEvent<>) => void
 
 const _omit = (props: {}, propToOmit: string): {} => {
   let propsCopy = {...props}
@@ -23,8 +25,6 @@ const _omit = (props: {}, propToOmit: string): {} => {
 
   return propsCopy
 }
-
-type InternalHandler = (eventName: EventName, event?: SyntheticEvent<>) => void
 
 const _eventNamesToHandlerLookup = (
   eventNames?: EventName[],
@@ -47,11 +47,14 @@ export default ({
   shouldResetTimerOnRetrigger = true,
   beforeHandle = () => true,
 }: ComposerSettings) => {
-  if (process.env.NODE_ENV !== 'production' && !eventPropName) {
-    throw new Error('`eventPropName` configuration must be specified')
-  }
-  if (process.env.NODE_ENV !== 'production' && !triggerEvent) {
-    throw new Error('`triggerEvent` configuration must be specified')
+  // istanbul ignore next
+  if (process.env.NODE_ENV !== 'production') {
+    if (!eventPropName) {
+      throw new Error('`eventPropName` configuration must be specified')
+    }
+    if (!triggerEvent) {
+      throw new Error('`triggerEvent` configuration must be specified')
+    }
   }
 
   let triggerEvents = Array.isArray(triggerEvent)
@@ -63,7 +66,7 @@ export default ({
     cancelEvents = Array.isArray(cancelEvent) ? cancelEvent : [cancelEvent]
   }
 
-  return (duration: number) => {
+  return (duration?: number = 0) => {
     let timeoutDuration = defaultDuration
     let durationSuffix = ''
 
@@ -77,13 +80,15 @@ export default ({
     // if the duration is passed the composite even prop name needs to be parameterized
     let compositeEventPropName = `${eventPropName}${durationSuffix}`
 
-    return <Props: {}>(Component: ComponentType<{}>): ComponentType<Props> => {
-      if (process.env.NODE_ENV !== 'production' && !Component) {
-        throw new Error('Component to enhance must be specified')
+    return <Props: {}>(Element: ElementType): ComponentType<Props> => {
+      if (!Element && process.env.NODE_ENV !== 'production') {
+        throw new Error('Component/element to enhance must be specified')
       }
 
-      return class extends React.Component<Props> {
-        static displayName = `CompositeEvent-${eventPropName}${durationSuffix}`
+      let elementDisplayName = getDisplayName(Element)
+
+      return class CompositeEventWrapper extends Component<Props> {
+        static displayName = `${elementDisplayName}-${eventPropName}${durationSuffix}`
 
         _delayTimeout = null
 
@@ -118,9 +123,15 @@ export default ({
           // If a specific handler was passed, call that one first
           this._callSpecificHandler(eventName, e)
 
-          // If no composite event handler was passed in, we can
-          // quit early
           if (!onCompositeEvent) {
+            // istanbul ignore next
+            if (process.env.NODE_ENV !== 'production') {
+              // eslint-disable-next-line no-console
+              console.warn(
+                `No handler was found for \`${compositeEventPropName}\` in \`<${elementDisplayName} />\`! Was this a typo? If not, you should consider avoiding using the composite event HOC to improve performance`
+              )
+            }
+
             return
           }
 
@@ -174,7 +185,7 @@ export default ({
           // a cancel event matches a trigger event, the composite event will never be triggered
 
           return (
-            <Component
+            <Element
               {...passThruProps}
               {...triggerEventHandlers}
               {...cancelEventHandlers}
