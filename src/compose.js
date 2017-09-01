@@ -47,11 +47,14 @@ export default ({
   shouldResetTimerOnRetrigger = true,
   beforeHandle = () => true,
 }: ComposerSettings) => {
-  if (process.env.NODE_ENV !== 'production' && !eventPropName) {
-    throw new Error('`eventPropName` configuration must be specified')
-  }
-  if (process.env.NODE_ENV !== 'production' && !triggerEvent) {
-    throw new Error('`triggerEvent` configuration must be specified')
+  // istanbul ignore next
+  if (process.env.NODE_ENV !== 'production') {
+    if (!eventPropName) {
+      throw new Error('`eventPropName` configuration must be specified')
+    }
+    if (!triggerEvent) {
+      throw new Error('`triggerEvent` configuration must be specified')
+    }
   }
 
   let triggerEvents = Array.isArray(triggerEvent)
@@ -78,7 +81,7 @@ export default ({
     let compositeEventPropName = `${eventPropName}${durationSuffix}`
 
     return <Props: {}>(Element: ElementType): ComponentType<Props> => {
-      if (process.env.NODE_ENV !== 'production' && !Element) {
+      if (!Element && process.env.NODE_ENV !== 'production') {
         throw new Error('Component/element to enhance must be specified')
       }
 
@@ -120,9 +123,8 @@ export default ({
           // If a specific handler was passed, call that one first
           this._callSpecificHandler(eventName, e)
 
-          // If no composite event handler was passed in, we can
-          // quit early
           if (!onCompositeEvent) {
+            // istanbul ignore next
             if (process.env.NODE_ENV !== 'production') {
               // eslint-disable-next-line no-console
               console.warn(
