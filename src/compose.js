@@ -5,6 +5,8 @@ import {getDisplayName} from './utils'
 
 type EventName = string
 type TimerEvent = EventName | EventName[]
+type EventHandler = (event?: SyntheticEvent<>) => void
+type CompositeEventHandler = EventHandler
 type ComposerSettings = {
   eventPropName: EventName,
   triggerEvent: TimerEvent,
@@ -12,7 +14,7 @@ type ComposerSettings = {
   cancelEvent?: TimerEvent,
   shouldResetTimerOnRetrigger?: boolean,
   beforeHandle?: (
-    handler: (event?: SyntheticEvent<>) => void,
+    handler: CompositeEventHandler,
     event?: SyntheticEvent<>
   ) => boolean | void,
 }
@@ -80,20 +82,20 @@ export default ({
     // if the duration is passed the composite even prop name needs to be parameterized
     let compositeEventPropName = `${eventPropName}${durationSuffix}`
 
-    return <Props: {}>(Element: ElementType): ComponentType<Props> => {
+    return (Element: ElementType): ComponentType<{}> => {
       if (!Element && process.env.NODE_ENV !== 'production') {
         throw new Error('Component/element to enhance must be specified')
       }
 
       let elementDisplayName = getDisplayName(Element)
 
-      return class CompositeEventWrapper extends Component<Props> {
+      return class CompositeEventWrapper extends Component<{}> {
         static displayName = `${elementDisplayName}-${eventPropName}${durationSuffix}`
 
         _delayTimeout = null
 
         _callSpecificHandler = (eventName: EventName, e?: SyntheticEvent<>) => {
-          let onEvent = this.props[eventName]
+          let onEvent: EventHandler = this.props[eventName]
 
           if (onEvent) {
             onEvent(e)
@@ -105,7 +107,9 @@ export default ({
         }
 
         _callCompositeEvent = (e?: SyntheticEvent<>) => {
-          let onCompositeEvent = this.props[compositeEventPropName]
+          let onCompositeEvent: CompositeEventHandler = this.props[
+            compositeEventPropName
+          ]
 
           // If a before handle function is defined, call it and check to see what the function returns
           // truthy - means that it wants the HOC to to call the final handler with the event object
@@ -118,7 +122,9 @@ export default ({
         }
 
         _handleTriggerEvent = (eventName: EventName, e?: SyntheticEvent<>) => {
-          let onCompositeEvent = this.props[compositeEventPropName]
+          let onCompositeEvent: CompositeEventHandler = this.props[
+            compositeEventPropName
+          ]
 
           // If a specific handler was passed, call that one first
           this._callSpecificHandler(eventName, e)
