@@ -1,7 +1,8 @@
 {
   "name": "react-composite-events",
   "version": "0.0.0-semantically-released",
-  "description": "A collection of higher-order components (HOCs) to easily create composite events in React components",
+  "description":
+    "A collection of higher-order components (HOCs) to easily create composite events in React components",
   "author": "Ben Ilegbodu <ben@benmvp.com>",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
@@ -75,15 +76,7 @@
     }
   },
   "jest": {
-    "setupTestFrameworkScriptFile": "./node_modules/jest-enzyme/lib/index.js",
-    "coverageThreshold": {
-      "global": {
-        "branches": 100,
-        "functions": 100,
-        "lines": 100,
-        "statements": 100
-      }
-    }
+    "setupTestFrameworkScriptFile": "./node_modules/jest-enzyme/lib/index.js"
   },
   "peerDependencies": {
     "react": ">=15"
