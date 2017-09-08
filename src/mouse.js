@@ -29,25 +29,17 @@ const composeMouseEdge = ({
     eventPropName,
     triggerEvent: direction === 'enter' ? 'onMouseEnter' : 'onMouseLeave',
     beforeHandle: (handler, e?: SyntheticEvent<>) => {
-      let {currentTarget, screenX, screenY} = ((e: any): SyntheticMouseEvent<>)
-
-      let boundingClientRect = {top: 0, left: 0, bottom: 0, right: 0}
-
-      if (currentTarget instanceof HTMLElement) {
-        boundingClientRect = currentTarget.getBoundingClientRect()
+      if (!e) {
+        return false
       }
 
-      let {
-        top,
-        left,
-        bottom,
-        right,
-      }: {
-        top: number,
-        left: number,
-        bottom: number,
-        right: number,
-      } = boundingClientRect
+      let {screenX, screenY, currentTarget} = ((e: any): SyntheticMouseEvent<>)
+
+      if (!(currentTarget instanceof HTMLElement)) {
+        return false
+      }
+
+      let {top, left, bottom, right} = currentTarget.getBoundingClientRect()
 
       return (
         (location === 'left' && screenX <= left) ||

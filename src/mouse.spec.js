@@ -24,6 +24,8 @@ import {
 
 jest.useFakeTimers()
 
+const Dummy = () => <div />
+
 const overrideBoundingRect = (
   wrapper: ReactWrapper,
   {top = 50, left = 50, bottom = 150, right = 150} = {}
@@ -1549,5 +1551,43 @@ describe('`withMouseLeaveBottom`', () => {
 
     expect(onMouseLeaveBottom).toHaveBeenCalledTimes(1)
     expect(onMouseLeaveBottom.mock.calls[0][0]).toMatchObject(fakeEventObject)
+  })
+
+  it('does not blow up when no event object is passed on trigger event', () => {
+    const EnhancedSampleDummy = withMouseLeaveBottom()(Dummy)
+
+    let onMouseLeaveBottom = jest.fn()
+    let wrapper = mount(
+      <EnhancedSampleDummy onMouseLeaveBottom={onMouseLeaveBottom} />
+    )
+    let dummyWrapper = wrapper.find(Dummy)
+
+    // simulate trigger event
+    let triggerEvent = () => dummyWrapper.prop('onMouseLeave')()
+
+    expect(triggerEvent).not.toThrow()
+
+    expect(onMouseLeaveBottom).toHaveBeenCalledTimes(0)
+  })
+
+  it('does not blow up when trigger event passes an event that is not a mouse event', () => {
+    const EnhancedSampleDummy = withMouseLeaveBottom()(Dummy)
+
+    let onMouseLeaveBottom = jest.fn()
+    let wrapper = mount(
+      <EnhancedSampleDummy onMouseLeaveBottom={onMouseLeaveBottom} />
+    )
+    let dummyWrapper = wrapper.find(Dummy)
+    let fakeEventObject = {
+      screenX: 150,
+      screenY: 150,
+    }
+
+    // simulate trigger event
+    let triggerEvent = () => dummyWrapper.prop('onMouseLeave')(fakeEventObject)
+
+    expect(triggerEvent).not.toThrow()
+
+    expect(onMouseLeaveBottom).toHaveBeenCalledTimes(0)
   })
 })
