@@ -71,19 +71,12 @@
     },
     "globals": {
       "SyntheticEvent": false,
-      "SyntheticMouseEvent": false
+      "SyntheticMouseEvent": false,
+      "HTMLElement": false
     }
   },
   "jest": {
-    "setupTestFrameworkScriptFile": "./node_modules/jest-enzyme/lib/index.js",
-    "coverageThreshold": {
-      "global": {
-        "branches": 100,
-        "functions": 100,
-        "lines": 100,
-        "statements": 100
-      }
-    }
+    "setupTestFrameworkScriptFile": "./node_modules/jest-enzyme/lib/index.js"
   },
   "peerDependencies": {
     "react": ">=15"

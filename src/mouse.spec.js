@@ -1,6 +1,7 @@
 // @flow
 import React from 'react'
-import {shallow} from 'enzyme'
+import {shallow, mount} from 'enzyme'
+import type {ReactWrapper} from 'enzyme'
 import {
   withMouseRest,
   withMouseRemainOut,
@@ -10,10 +11,41 @@ import {
   withAltClick,
   withCtrlClick,
   withMetaClick,
-  withShiftClick
+  withShiftClick,
+  withMouseEnterLeft,
+  withMouseEnterRight,
+  withMouseEnterTop,
+  withMouseEnterBottom,
+  withMouseLeaveLeft,
+  withMouseLeaveRight,
+  withMouseLeaveTop,
+  withMouseLeaveBottom
 } from './mouse'
 
 jest.useFakeTimers()
+
+const Dummy = () => <div />
+
+const overrideBoundingRect = (
+  wrapper: ReactWrapper,
+  {top = 50, left = 50, bottom = 150, right = 150} = {}
+): ReactWrapper => {
+  let newWrapper = wrapper
+
+  // $FlowIgnore
+  newWrapper.getDOMNode().getBoundingClientRect = () => ({
+    top,
+    left,
+    bottom,
+    right,
+    x: left,
+    y: top,
+    width: right - left,
+    height: bottom - top,
+  })
+
+  return newWrapper
+}
 
 describe('`withMouseRest`', () => {
   it('calls handler after mouse over & default 500 ms', () => {
@@ -799,5 +831,763 @@ describe('`withShiftClick`', () => {
     divWrapper.simulate('click', fakeEventObject)
 
     expect(onShiftClick).toHaveBeenCalledTimes(0)
+  })
+})
+
+describe('`withMouseEnterLeft`', () => {
+  it('calls handler when mouse enters from the left side', () => {
+    const EnhancedDiv = withMouseEnterLeft()('div')
+
+    let onMouseEnterLeft = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseEnterLeft={onMouseEnterLeft} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 50,
+      screenY: 100,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseenter', fakeEventObject)
+
+    expect(onMouseEnterLeft).toHaveBeenCalledTimes(1)
+    expect(onMouseEnterLeft.mock.calls[0][0]).toMatchObject(fakeEventObject)
+  })
+
+  it('does not call handler when mouse enters from the right side', () => {
+    const EnhancedDiv = withMouseEnterLeft()('div')
+
+    let onMouseEnterLeft = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseEnterLeft={onMouseEnterLeft} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 150,
+      screenY: 100,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseenter', fakeEventObject)
+
+    expect(onMouseEnterLeft).toHaveBeenCalledTimes(0)
+  })
+
+  it('does not call handler when mouse leaves from the left side', () => {
+    const EnhancedDiv = withMouseEnterLeft()('div')
+
+    let onMouseEnterLeft = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseEnterLeft={onMouseEnterLeft} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 50,
+      screenY: 100,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseleave', fakeEventObject)
+
+    expect(onMouseEnterLeft).toHaveBeenCalledTimes(0)
+  })
+
+  it('calls handler when mouse enters from top-left corner', () => {
+    const EnhancedDiv = withMouseEnterLeft()('div')
+
+    let onMouseEnterLeft = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseEnterLeft={onMouseEnterLeft} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 50,
+      screenY: 50,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseenter', fakeEventObject)
+
+    expect(onMouseEnterLeft).toHaveBeenCalledTimes(1)
+    expect(onMouseEnterLeft.mock.calls[0][0]).toMatchObject(fakeEventObject)
+  })
+
+  it('calls handler when mouse enters from bottom-left corner', () => {
+    const EnhancedDiv = withMouseEnterLeft()('div')
+
+    let onMouseEnterLeft = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseEnterLeft={onMouseEnterLeft} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 50,
+      screenY: 150,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseenter', fakeEventObject)
+
+    expect(onMouseEnterLeft).toHaveBeenCalledTimes(1)
+    expect(onMouseEnterLeft.mock.calls[0][0]).toMatchObject(fakeEventObject)
+  })
+})
+
+describe('`withMouseEnterRight`', () => {
+  it('calls handler when mouse enters from the right side', () => {
+    const EnhancedDiv = withMouseEnterRight()('div')
+
+    let onMouseEnterRight = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseEnterRight={onMouseEnterRight} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 150,
+      screenY: 100,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseenter', fakeEventObject)
+
+    expect(onMouseEnterRight).toHaveBeenCalledTimes(1)
+    expect(onMouseEnterRight.mock.calls[0][0]).toMatchObject(fakeEventObject)
+  })
+
+  it('does not call handler when mouse enters from the left side', () => {
+    const EnhancedDiv = withMouseEnterRight()('div')
+
+    let onMouseEnterRight = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseEnterRight={onMouseEnterRight} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 50,
+      screenY: 100,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseenter', fakeEventObject)
+
+    expect(onMouseEnterRight).toHaveBeenCalledTimes(0)
+  })
+
+  it('does not call handler when mouse leaves from the right side', () => {
+    const EnhancedDiv = withMouseEnterRight()('div')
+
+    let onMouseEnterRight = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseEnterRight={onMouseEnterRight} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 150,
+      screenY: 100,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseleave', fakeEventObject)
+
+    expect(onMouseEnterRight).toHaveBeenCalledTimes(0)
+  })
+
+  it('calls handler when mouse enters from top-right corner', () => {
+    const EnhancedDiv = withMouseEnterRight()('div')
+
+    let onMouseEnterRight = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseEnterRight={onMouseEnterRight} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 150,
+      screenY: 50,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseenter', fakeEventObject)
+
+    expect(onMouseEnterRight).toHaveBeenCalledTimes(1)
+    expect(onMouseEnterRight.mock.calls[0][0]).toMatchObject(fakeEventObject)
+  })
+
+  it('calls handler when mouse enters from bottom-right corner', () => {
+    const EnhancedDiv = withMouseEnterRight()('div')
+
+    let onMouseEnterRight = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseEnterRight={onMouseEnterRight} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 150,
+      screenY: 150,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseenter', fakeEventObject)
+
+    expect(onMouseEnterRight).toHaveBeenCalledTimes(1)
+    expect(onMouseEnterRight.mock.calls[0][0]).toMatchObject(fakeEventObject)
+  })
+})
+
+describe('`withMouseEnterTop`', () => {
+  it('calls handler when mouse enters from the top side', () => {
+    const EnhancedDiv = withMouseEnterTop()('div')
+
+    let onMouseEnterTop = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseEnterTop={onMouseEnterTop} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 100,
+      screenY: 50,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseenter', fakeEventObject)
+
+    expect(onMouseEnterTop).toHaveBeenCalledTimes(1)
+    expect(onMouseEnterTop.mock.calls[0][0]).toMatchObject(fakeEventObject)
+  })
+
+  it('does not call handler when mouse enters from the bottom side', () => {
+    const EnhancedDiv = withMouseEnterTop()('div')
+
+    let onMouseEnterTop = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseEnterTop={onMouseEnterTop} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 100,
+      screenY: 150,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseenter', fakeEventObject)
+
+    expect(onMouseEnterTop).toHaveBeenCalledTimes(0)
+  })
+
+  it('does not call handler when mouse leaves from the top side', () => {
+    const EnhancedDiv = withMouseEnterTop()('div')
+
+    let onMouseEnterTop = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseEnterTop={onMouseEnterTop} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 100,
+      screenY: 50,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseleave', fakeEventObject)
+
+    expect(onMouseEnterTop).toHaveBeenCalledTimes(0)
+  })
+
+  it('calls handler when mouse enters from top-left corner', () => {
+    const EnhancedDiv = withMouseEnterTop()('div')
+
+    let onMouseEnterTop = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseEnterTop={onMouseEnterTop} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 50,
+      screenY: 50,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseenter', fakeEventObject)
+
+    expect(onMouseEnterTop).toHaveBeenCalledTimes(1)
+    expect(onMouseEnterTop.mock.calls[0][0]).toMatchObject(fakeEventObject)
+  })
+
+  it('calls handler when mouse enters from top-right corner', () => {
+    const EnhancedDiv = withMouseEnterTop()('div')
+
+    let onMouseEnterTop = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseEnterTop={onMouseEnterTop} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 150,
+      screenY: 50,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseenter', fakeEventObject)
+
+    expect(onMouseEnterTop).toHaveBeenCalledTimes(1)
+    expect(onMouseEnterTop.mock.calls[0][0]).toMatchObject(fakeEventObject)
+  })
+})
+
+describe('`withMouseEnterBottom`', () => {
+  it('calls handler when mouse enters from the bottom side', () => {
+    const EnhancedDiv = withMouseEnterBottom()('div')
+
+    let onMouseEnterBottom = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseEnterBottom={onMouseEnterBottom} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 100,
+      screenY: 150,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseenter', fakeEventObject)
+
+    expect(onMouseEnterBottom).toHaveBeenCalledTimes(1)
+    expect(onMouseEnterBottom.mock.calls[0][0]).toMatchObject(fakeEventObject)
+  })
+
+  it('does not call handler when mouse enters from the top side', () => {
+    const EnhancedDiv = withMouseEnterBottom()('div')
+
+    let onMouseEnterBottom = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseEnterBottom={onMouseEnterBottom} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 100,
+      screenY: 50,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseenter', fakeEventObject)
+
+    expect(onMouseEnterBottom).toHaveBeenCalledTimes(0)
+  })
+
+  it('does not call handler when mouse leaves from the bottom side', () => {
+    const EnhancedDiv = withMouseEnterBottom()('div')
+
+    let onMouseEnterBottom = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseEnterBottom={onMouseEnterBottom} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 100,
+      screenY: 150,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseleave', fakeEventObject)
+
+    expect(onMouseEnterBottom).toHaveBeenCalledTimes(0)
+  })
+
+  it('calls handler when mouse enters from bottom-left corner', () => {
+    const EnhancedDiv = withMouseEnterBottom()('div')
+
+    let onMouseEnterBottom = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseEnterBottom={onMouseEnterBottom} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 50,
+      screenY: 150,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseenter', fakeEventObject)
+
+    expect(onMouseEnterBottom).toHaveBeenCalledTimes(1)
+    expect(onMouseEnterBottom.mock.calls[0][0]).toMatchObject(fakeEventObject)
+  })
+
+  it('calls handler when mouse enters from bottom-right corner', () => {
+    const EnhancedDiv = withMouseEnterBottom()('div')
+
+    let onMouseEnterBottom = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseEnterBottom={onMouseEnterBottom} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 150,
+      screenY: 150,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseenter', fakeEventObject)
+
+    expect(onMouseEnterBottom).toHaveBeenCalledTimes(1)
+    expect(onMouseEnterBottom.mock.calls[0][0]).toMatchObject(fakeEventObject)
+  })
+})
+
+describe('`withMouseLeaveLeft`', () => {
+  it('calls handler when mouse leaves from the left side', () => {
+    const EnhancedDiv = withMouseLeaveLeft()('div')
+
+    let onMouseLeaveLeft = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseLeaveLeft={onMouseLeaveLeft} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 50,
+      screenY: 100,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseleave', fakeEventObject)
+
+    expect(onMouseLeaveLeft).toHaveBeenCalledTimes(1)
+    expect(onMouseLeaveLeft.mock.calls[0][0]).toMatchObject(fakeEventObject)
+  })
+
+  it('does not call handler when mouse leaves from the right side', () => {
+    const EnhancedDiv = withMouseLeaveLeft()('div')
+
+    let onMouseLeaveLeft = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseLeaveLeft={onMouseLeaveLeft} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 150,
+      screenY: 100,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseleave', fakeEventObject)
+
+    expect(onMouseLeaveLeft).toHaveBeenCalledTimes(0)
+  })
+
+  it('does not call handler when mouse enters from the left side', () => {
+    const EnhancedDiv = withMouseLeaveLeft()('div')
+
+    let onMouseLeaveLeft = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseLeaveLeft={onMouseLeaveLeft} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 50,
+      screenY: 100,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseenter', fakeEventObject)
+
+    expect(onMouseLeaveLeft).toHaveBeenCalledTimes(0)
+  })
+
+  it('calls handler when mouse leaves from top-left corner', () => {
+    const EnhancedDiv = withMouseLeaveLeft()('div')
+
+    let onMouseLeaveLeft = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseLeaveLeft={onMouseLeaveLeft} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 50,
+      screenY: 50,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseleave', fakeEventObject)
+
+    expect(onMouseLeaveLeft).toHaveBeenCalledTimes(1)
+    expect(onMouseLeaveLeft.mock.calls[0][0]).toMatchObject(fakeEventObject)
+  })
+
+  it('calls handler when mouse leaves from bottom-left corner', () => {
+    const EnhancedDiv = withMouseLeaveLeft()('div')
+
+    let onMouseLeaveLeft = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseLeaveLeft={onMouseLeaveLeft} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 50,
+      screenY: 150,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseleave', fakeEventObject)
+
+    expect(onMouseLeaveLeft).toHaveBeenCalledTimes(1)
+    expect(onMouseLeaveLeft.mock.calls[0][0]).toMatchObject(fakeEventObject)
+  })
+})
+
+describe('`withMouseLeaveRight`', () => {
+  it('calls handler when mouse leaves from the right side', () => {
+    const EnhancedDiv = withMouseLeaveRight()('div')
+
+    let onMouseLeaveRight = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseLeaveRight={onMouseLeaveRight} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 150,
+      screenY: 100,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseleave', fakeEventObject)
+
+    expect(onMouseLeaveRight).toHaveBeenCalledTimes(1)
+    expect(onMouseLeaveRight.mock.calls[0][0]).toMatchObject(fakeEventObject)
+  })
+
+  it('does not call handler when mouse leaves from the left side', () => {
+    const EnhancedDiv = withMouseLeaveRight()('div')
+
+    let onMouseLeaveRight = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseLeaveRight={onMouseLeaveRight} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 50,
+      screenY: 100,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseleave', fakeEventObject)
+
+    expect(onMouseLeaveRight).toHaveBeenCalledTimes(0)
+  })
+
+  it('does not call handler when mouse enters from the right side', () => {
+    const EnhancedDiv = withMouseLeaveRight()('div')
+
+    let onMouseLeaveRight = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseLeaveRight={onMouseLeaveRight} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 150,
+      screenY: 100,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseenter', fakeEventObject)
+
+    expect(onMouseLeaveRight).toHaveBeenCalledTimes(0)
+  })
+
+  it('calls handler when mouse leaves from top-right corner', () => {
+    const EnhancedDiv = withMouseLeaveRight()('div')
+
+    let onMouseLeaveRight = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseLeaveRight={onMouseLeaveRight} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 150,
+      screenY: 50,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseleave', fakeEventObject)
+
+    expect(onMouseLeaveRight).toHaveBeenCalledTimes(1)
+    expect(onMouseLeaveRight.mock.calls[0][0]).toMatchObject(fakeEventObject)
+  })
+
+  it('calls handler when mouse leaves from bottom-right corner', () => {
+    const EnhancedDiv = withMouseLeaveRight()('div')
+
+    let onMouseLeaveRight = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseLeaveRight={onMouseLeaveRight} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 150,
+      screenY: 150,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseleave', fakeEventObject)
+
+    expect(onMouseLeaveRight).toHaveBeenCalledTimes(1)
+    expect(onMouseLeaveRight.mock.calls[0][0]).toMatchObject(fakeEventObject)
+  })
+})
+
+describe('`withMouseLeaveTop`', () => {
+  it('calls handler when mouse leaves from the top side', () => {
+    const EnhancedDiv = withMouseLeaveTop()('div')
+
+    let onMouseLeaveTop = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseLeaveTop={onMouseLeaveTop} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 100,
+      screenY: 50,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseleave', fakeEventObject)
+
+    expect(onMouseLeaveTop).toHaveBeenCalledTimes(1)
+    expect(onMouseLeaveTop.mock.calls[0][0]).toMatchObject(fakeEventObject)
+  })
+
+  it('does not call handler when mouse leaves from the bottom side', () => {
+    const EnhancedDiv = withMouseLeaveTop()('div')
+
+    let onMouseLeaveTop = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseLeaveTop={onMouseLeaveTop} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 100,
+      screenY: 150,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseleave', fakeEventObject)
+
+    expect(onMouseLeaveTop).toHaveBeenCalledTimes(0)
+  })
+
+  it('does not call handler when mouse enters from the top side', () => {
+    const EnhancedDiv = withMouseLeaveTop()('div')
+
+    let onMouseLeaveTop = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseLeaveTop={onMouseLeaveTop} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 100,
+      screenY: 50,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseenter', fakeEventObject)
+
+    expect(onMouseLeaveTop).toHaveBeenCalledTimes(0)
+  })
+
+  it('calls handler when mouse leaves from top-left corner', () => {
+    const EnhancedDiv = withMouseLeaveTop()('div')
+
+    let onMouseLeaveTop = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseLeaveTop={onMouseLeaveTop} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 50,
+      screenY: 50,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseleave', fakeEventObject)
+
+    expect(onMouseLeaveTop).toHaveBeenCalledTimes(1)
+    expect(onMouseLeaveTop.mock.calls[0][0]).toMatchObject(fakeEventObject)
+  })
+
+  it('calls handler when mouse leaves from top-right corner', () => {
+    const EnhancedDiv = withMouseLeaveTop()('div')
+
+    let onMouseLeaveTop = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseLeaveTop={onMouseLeaveTop} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 150,
+      screenY: 50,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseleave', fakeEventObject)
+
+    expect(onMouseLeaveTop).toHaveBeenCalledTimes(1)
+    expect(onMouseLeaveTop.mock.calls[0][0]).toMatchObject(fakeEventObject)
+  })
+})
+
+describe('`withMouseLeaveBottom`', () => {
+  it('calls handler when mouse leaves from the bottom side', () => {
+    const EnhancedDiv = withMouseLeaveBottom()('div')
+
+    let onMouseLeaveBottom = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseLeaveBottom={onMouseLeaveBottom} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 100,
+      screenY: 150,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseleave', fakeEventObject)
+
+    expect(onMouseLeaveBottom).toHaveBeenCalledTimes(1)
+    expect(onMouseLeaveBottom.mock.calls[0][0]).toMatchObject(fakeEventObject)
+  })
+
+  it('does not call handler when mouse leaves from the top side', () => {
+    const EnhancedDiv = withMouseLeaveBottom()('div')
+
+    let onMouseLeaveBottom = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseLeaveBottom={onMouseLeaveBottom} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 100,
+      screenY: 50,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseleave', fakeEventObject)
+
+    expect(onMouseLeaveBottom).toHaveBeenCalledTimes(0)
+  })
+
+  it('does not call handler when mouse enters from the bottom side', () => {
+    const EnhancedDiv = withMouseLeaveBottom()('div')
+
+    let onMouseLeaveBottom = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseLeaveBottom={onMouseLeaveBottom} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 100,
+      screenY: 150,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseenter', fakeEventObject)
+
+    expect(onMouseLeaveBottom).toHaveBeenCalledTimes(0)
+  })
+
+  it('calls handler when mouse leaves from bottom-left corner', () => {
+    const EnhancedDiv = withMouseLeaveBottom()('div')
+
+    let onMouseLeaveBottom = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseLeaveBottom={onMouseLeaveBottom} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 50,
+      screenY: 150,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseleave', fakeEventObject)
+
+    expect(onMouseLeaveBottom).toHaveBeenCalledTimes(1)
+    expect(onMouseLeaveBottom.mock.calls[0][0]).toMatchObject(fakeEventObject)
+  })
+
+  it('calls handler when mouse leaves from bottom-right corner', () => {
+    const EnhancedDiv = withMouseLeaveBottom()('div')
+
+    let onMouseLeaveBottom = jest.fn()
+    let wrapper = mount(<EnhancedDiv onMouseLeaveBottom={onMouseLeaveBottom} />)
+    let divWrapper = overrideBoundingRect(wrapper.find('div'))
+    let fakeEventObject = {
+      screenX: 150,
+      screenY: 150,
+    }
+
+    // simulate trigger event
+    divWrapper.simulate('mouseleave', fakeEventObject)
+
+    expect(onMouseLeaveBottom).toHaveBeenCalledTimes(1)
+    expect(onMouseLeaveBottom.mock.calls[0][0]).toMatchObject(fakeEventObject)
+  })
+
+  it('does not blow up when no event object is passed on trigger event', () => {
+    const EnhancedSampleDummy = withMouseLeaveBottom()(Dummy)
+
+    let onMouseLeaveBottom = jest.fn()
+    let wrapper = mount(
+      <EnhancedSampleDummy onMouseLeaveBottom={onMouseLeaveBottom} />
+    )
+    let dummyWrapper = wrapper.find(Dummy)
+
+    // simulate trigger event
+    let triggerEvent = () => dummyWrapper.prop('onMouseLeave')()
+
+    expect(triggerEvent).not.toThrow()
+
+    expect(onMouseLeaveBottom).toHaveBeenCalledTimes(0)
+  })
+
+  it('does not blow up when trigger event passes an event that is not a mouse event', () => {
+    const EnhancedSampleDummy = withMouseLeaveBottom()(Dummy)
+
+    let onMouseLeaveBottom = jest.fn()
+    let wrapper = mount(
+      <EnhancedSampleDummy onMouseLeaveBottom={onMouseLeaveBottom} />
+    )
+    let dummyWrapper = wrapper.find(Dummy)
+    let fakeEventObject = {
+      screenX: 150,
+      screenY: 150,
+    }
+
+    // simulate trigger event
+    let triggerEvent = () => dummyWrapper.prop('onMouseLeave')(fakeEventObject)
+
+    expect(triggerEvent).not.toThrow()
+
+    expect(onMouseLeaveBottom).toHaveBeenCalledTimes(0)
   })
 })
