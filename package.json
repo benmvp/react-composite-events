@@ -1,7 +1,8 @@
 {
   "name": "react-composite-events",
   "version": "0.0.0-semantically-released",
-  "description": "A collection of higher-order components (HOCs) to easily create composite events in React components",
+  "description":
+    "A collection of higher-order components (HOCs) to easily create composite events in React components",
   "author": "Ben Ilegbodu <ben@benmvp.com>",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
@@ -90,7 +91,7 @@
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-eslint": "^7.0.0",
-    "babel-jest": "^20.0.3",
+    "babel-jest": "^21.0.0",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-es2015-modules-umd": "^6.24.1",
@@ -117,7 +118,7 @@
     "gulp-uglify": "^3.0.0",
     "gulp-util": "^3.0.8",
     "husky": "^0.14.3",
-    "jest": "^20.0.4",
+    "jest": "^21.0.1",
     "jest-enzyme": "^3.6.1",
     "lint-staged": "^4.0.1",
     "prettier-eslint-cli": "^4.1.1",
