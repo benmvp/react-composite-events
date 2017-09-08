@@ -70,7 +70,8 @@
     },
     "globals": {
       "SyntheticEvent": false,
-      "SyntheticMouseEvent": false
+      "SyntheticMouseEvent": false,
+      "HTMLElement": false
     }
   },
   "jest": {

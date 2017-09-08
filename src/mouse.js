@@ -1,5 +1,86 @@
 // @flow
 import compose from './compose'
+import type {EventName} from './compose'
+
+type EdgeLocation = 'left' | 'right' | 'top' | 'bottom'
+type EdgeDirection = 'enter' | 'leave'
+
+type MouseEdgeSettings = {
+  eventPropName: EventName,
+  direction: EdgeDirection,
+  location: EdgeLocation,
+}
+
+type MouseModifierKeySettings = {
+  eventPropName: EventName,
+  mouseEvent: EventName,
+  alt?: boolean,
+  ctrl?: boolean,
+  meta?: boolean,
+  shift?: boolean,
+}
+
+const composeMouseEdge = ({
+  eventPropName,
+  direction,
+  location,
+}: MouseEdgeSettings) =>
+  compose({
+    eventPropName,
+    triggerEvent: direction === 'enter' ? 'onMouseEnter' : 'onMouseLeave',
+    beforeHandle: (handler, e?: SyntheticEvent<>) => {
+      let {currentTarget, screenX, screenY} = ((e: any): SyntheticMouseEvent<>)
+
+      let boundingClientRect = {top: 0, left: 0, bottom: 0, right: 0}
+
+      if (currentTarget instanceof HTMLElement) {
+        boundingClientRect = currentTarget.getBoundingClientRect()
+      }
+
+      let {
+        top,
+        left,
+        bottom,
+        right,
+      }: {
+        top: number,
+        left: number,
+        bottom: number,
+        right: number,
+      } = boundingClientRect
+
+      return (
+        (location === 'left' && screenX <= left) ||
+        (location === 'right' && screenX >= right) ||
+        (location === 'top' && screenY <= top) ||
+        (location === 'bottom' && screenY >= bottom)
+      )
+    },
+  })
+
+export const composeMouseModifierKey = ({
+  eventPropName,
+  mouseEvent,
+  alt = false,
+  ctrl = false,
+  meta = false,
+  shift = false,
+}: MouseModifierKeySettings) =>
+  compose({
+    eventPropName,
+    triggerEvent: mouseEvent,
+    beforeHandle: (handler, e?: SyntheticEvent<>) => {
+      let syntheticMouseEvent = ((e: any): SyntheticMouseEvent<>)
+
+      return (
+        syntheticMouseEvent &&
+        syntheticMouseEvent.altKey === alt &&
+        syntheticMouseEvent.ctrlKey === ctrl &&
+        syntheticMouseEvent.metaKey === meta &&
+        syntheticMouseEvent.shiftKey === shift
+      )
+    },
+  })
 
 export const withMouseRest = compose({
   eventPropName: 'onMouseRest',
@@ -25,38 +106,53 @@ export const withMouseRemainOut = compose({
   cancelEvent: 'onMouseOver',
 })
 
-type MouseModifierKeySettings = {
-  eventPropName: string,
-  mouseEvent: string,
-  alt?: boolean,
-  ctrl?: boolean,
-  meta?: boolean,
-  shift?: boolean,
-}
+export const withMouseEnterLeft = composeMouseEdge({
+  eventPropName: 'onMouseEnterLeft',
+  direction: 'enter',
+  location: 'left',
+})
 
-export const composeMouseModifierKey = ({
-  eventPropName,
-  mouseEvent,
-  alt = false,
-  ctrl = false,
-  meta = false,
-  shift = false,
-}: MouseModifierKeySettings) =>
-  compose({
-    eventPropName,
-    triggerEvent: mouseEvent,
-    beforeHandle: (handler, e?: SyntheticEvent<>) => {
-      let syntheticMouseEvent = ((e: any): SyntheticMouseEvent<>)
+export const withMouseEnterRight = composeMouseEdge({
+  eventPropName: 'onMouseEnterRight',
+  direction: 'enter',
+  location: 'right',
+})
 
-      return (
-        syntheticMouseEvent &&
-        syntheticMouseEvent.altKey === alt &&
-        syntheticMouseEvent.ctrlKey === ctrl &&
-        syntheticMouseEvent.metaKey === meta &&
-        syntheticMouseEvent.shiftKey === shift
-      )
-    },
-  })
+export const withMouseEnterTop = composeMouseEdge({
+  eventPropName: 'onMouseEnterTop',
+  direction: 'enter',
+  location: 'top',
+})
+
+export const withMouseEnterBottom = composeMouseEdge({
+  eventPropName: 'onMouseEnterBottom',
+  direction: 'enter',
+  location: 'bottom',
+})
+
+export const withMouseLeaveLeft = composeMouseEdge({
+  eventPropName: 'onMouseLeaveLeft',
+  direction: 'leave',
+  location: 'left',
+})
+
+export const withMouseLeaveRight = composeMouseEdge({
+  eventPropName: 'onMouseLeaveRight',
+  direction: 'leave',
+  location: 'right',
+})
+
+export const withMouseLeaveTop = composeMouseEdge({
+  eventPropName: 'onMouseLeaveTop',
+  direction: 'leave',
+  location: 'top',
+})
+
+export const withMouseLeaveBottom = composeMouseEdge({
+  eventPropName: 'onMouseLeaveBottom',
+  direction: 'leave',
+  location: 'bottom',
+})
 
 export const withOnlyClick = composeMouseModifierKey({
   eventPropName: 'onOnlyClick',

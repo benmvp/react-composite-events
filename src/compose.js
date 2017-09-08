@@ -3,7 +3,7 @@ import React, {Component} from 'react'
 import type {ElementType, ComponentType} from 'react'
 import {getDisplayName} from './utils'
 
-type EventName = string
+export type EventName = string
 type TimerEvent = EventName | EventName[]
 type EventHandler = (event?: SyntheticEvent<>) => void
 type CompositeEventHandler = EventHandler
