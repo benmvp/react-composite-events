@@ -15,7 +15,7 @@
 
 [![Watch on GitHub](https://img.shields.io/github/watchers/benmvp/react-composite-events.svg?style=social)](https://github.com/benmvp/react-composite-events/watchers)
 [![Star on GitHub](https://img.shields.io/github/stars/benmvp/react-composite-events.svg?style=social)](https://github.com/benmvp/react-composite-events/stargazers)
-[![Tweet](https://img.shields.io/twitter/url/https/github.com/benmvp/react-composite-events.svg?style=social)](https://twitter.com/intent/tweet?text=Check%20out%20react-composite-events%20by%20%40benmvp!%0A%0Ahttps%3A%2F%2Fgithub.com%2Fbenmvp%2Freact-composite-events)
+[![Tweet](https://img.shields.io/twitter/url/https/github.com/benmvp/react-composite-events.svg?style=social)](https://twitter.com/intent/tweet?text=Check%20out%20react-composite-events%20by%20%40benmvp!%0A%0Ahttps%3A%2F%2Fgithub.com%2Fbenmvp%2Freact-composite-events) [![Greenkeeper badge](https://badges.greenkeeper.io/benmvp/react-composite-events.svg)](https://greenkeeper.io/)
 
 A collection of higher-order components (HOCs) to easily create composite events in React components.
 
